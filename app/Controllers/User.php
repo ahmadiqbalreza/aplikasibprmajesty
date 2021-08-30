@@ -15,7 +15,7 @@ class User extends BaseController
 	public function pengaturan()
 	{
 		$data = [
-			'title' => 'Pengaturan'
+			'title' => 'Profil Saya'
 		];
 		echo view('/user/pengaturan', $data);
 	}
@@ -23,7 +23,8 @@ class User extends BaseController
 	public function edit_profil()
 	{
 		$data = [
-			'title' => 'Edit Profil'
+			'title' => 'Edit Profil',
+			'navlink' => 'active'
 		];
 		echo view('/user/edit_profil', $data);
 	}

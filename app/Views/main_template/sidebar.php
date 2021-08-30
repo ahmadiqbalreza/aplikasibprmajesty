@@ -6,22 +6,45 @@
                 <div class="nav">
                     <?php if (in_groups('Admin')) : ?>
                         <div class="sb-sidenav-menu-heading">Admin Menu</div>
-                        <a class="nav-link" href="/admin">
+                        <a class="nav-link <?php
+                                            if ($title == "Admin") {
+                                                echo "active";
+                                            } ?>" href="/admin">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard Admin
                         </a>
-
-                        <a class="nav-link" href="/admin/akun_pengguna">
+                        <a class="nav-link <?php
+                                            if ($title == "Akun Pengguna") {
+                                                echo "active";
+                                            } ?>" href="/admin/akun_pengguna">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Akun Pengguna
                         </a>
-                        <a class="nav-link" href="tables.html">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsecuti" aria-expanded="false" aria-controls="collapsecuti">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Cuti Online
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsecuti" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/admin/tambah_karyawan">Tambah Karyawan</a>
+                                <a class="nav-link" href="/admin/data_karyawan">Data Karyawan</a>
+                            </nav>
+                        </div>
+
+                        <a class="nav-link<?php
+                                            if ($title == "Role Akun") {
+                                                echo "active";
+                                            } ?>" href="/admin/role_akun">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Role Akun
                         </a>
                     <?php endif ?>
                     <div class="sb-sidenav-menu-heading">Pengaturan Profil</div>
-                    <a class="nav-link" href="/user/pengaturan">
+                    <a class="nav-link <?php
+                                        if ($title == "Profil Saya") {
+                                            echo "active";
+                                        } ?>" href="/user/pengaturan">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                         Profil Saya
                     </a>

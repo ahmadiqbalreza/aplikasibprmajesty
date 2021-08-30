@@ -4,18 +4,18 @@ namespace App\Controllers;
 
 class Admin extends BaseController
 {
-    protected $db, $builder;
+    protected $db, $table_users, $table_karyawan;
 
     public function __construct()
     {
         $this->db = \Config\Database::connect();
-        $this->builder = $this->db->table('users');
+        $this->table_users = $this->db->table('users');
     }
 
     public function index()
     {
         $data = [
-            'title' => 'Admin | APLIKASI BPRMGR'
+            'title' => 'Admin'
         ];
         echo view('/admin/index', $data);
     }
@@ -25,12 +25,12 @@ class Admin extends BaseController
         // $users = new \Myth\Auth\Models\UserModel();
         // 'users' => $users->findAll()
 
-        $this->builder->select('users.id as userid, username, email, name');
-        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        $query = $this->builder->get();
+        $this->table_users->select('users.id as userid, username, email, name');
+        $this->table_users->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->table_users->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $query = $this->table_users->get();
         $data = [
-            'title' => 'Admin | APLIKASI BPRMGR',
+            'title' => 'Akun Pengguna',
             'users' => $query->getResult()
         ];
         echo view('/admin/akun_pengguna', $data);
@@ -38,13 +38,14 @@ class Admin extends BaseController
 
     public function detail($id = 0)
     {
-        $this->builder->select('users.id as userid, username, email, name');
-        $this->builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
-        $this->builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
-        $this->builder->where('users.id', $id);
-        $query = $this->builder->get();
+        $this->table_users->select('users.id as userid, username, department, email, name');
+        $this->table_users->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->table_users->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $this->table_users->where('users.id', $id);
+        $query = $this->table_users->get();
+
         $data = [
-            'title' => 'Admin | APLIKASI BPRMGR',
+            'title' => 'Akun Pengguna',
             'user' => $query->getRow()
         ];
 
@@ -53,5 +54,13 @@ class Admin extends BaseController
         }
 
         echo view('/admin/detail', $data);
+    }
+
+    public function tambah_karyawan()
+    {
+        $data = [
+            'title' => 'Tambah Karyawan'
+        ];
+        echo view('/admin/tambah_karyawan', $data);
     }
 }

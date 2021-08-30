@@ -51,5 +51,4 @@
 
         </div>
     </main>
-</div>
-<?= $this->endSection(); ?>
+    <?= $this->endSection(); ?>
