@@ -14,6 +14,13 @@
                             Dashboard Admin
                         </a>
                         <a class="nav-link <?php
+                                            if ($title == "Add Akun") {
+                                                echo "active";
+                                            } ?>" href="/admin/add_akun">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Add Akun
+                        </a>
+                        <a class="nav-link <?php
                                             if ($title == "Akun Pengguna") {
                                                 echo "active";
                                             } ?>" href="/admin/akun_pengguna">
