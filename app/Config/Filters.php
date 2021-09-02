@@ -36,6 +36,7 @@ class Filters extends BaseConfig
 			'honeypot',
 			// Dilarang access Semua Halaman
 			'login',
+			'role',
 			// 'csrf',
 		],
 		'after'  => [

@@ -13,6 +13,7 @@
                 <ol class="breadcrumb my-1 mx-1">
                     <li class="breadcrumb-item active small">Form Input</li>
                 </ol>
+                <?= view('Myth\Auth\Views\_message_block') ?>
                 <div class="row my-2 mx-4">
                 </div>
                 <form action="<?= route_to('register') ?>" method="post">
@@ -74,7 +75,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if (session('errors.department')) : ?>is-invalid<?php endif ?>" id="department" name="department" placeholder="Department" value="<?= old('department'); ?>" autocomplete="off">
+                                <select class="form-select form-control <?php if (session('errors.department')) : ?>is-invalid<?php endif ?>" id="department" name="department" aria-label="Department">
+                                    <option selected value="">Pilih Department</option>
+                                    <?php foreach ($department as $dept) : ?>
+                                        <option value="<?= $dept['department']; ?>"> <?= $dept['department']; ?></option>
+                                    <?php endforeach ?>
+                                </select>
                                 <div class="invalid-feedback">
                                     <?= session('errors.department'); ?>
                                 </div>
@@ -83,20 +89,42 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if (session('errors.status_karyawan')) : ?>is-invalid<?php endif ?>" id="status_karyawan" name="status_karyawan" placeholder="Status Karyawan" value="<?= old('status_karyawan'); ?>" autocomplete="off">
+                                <select class="form-select form-control <?php if (session('errors.role')) : ?>is-invalid<?php endif ?>" id="role" name="role" aria-label="role">
+                                    <option selected value="">Pilih Role</option>
+                                    <?php foreach ($role as $roles) : ?>
+                                        <option value="<?= $roles['name']; ?>"> <?= $roles['name']; ?></option>
+                                    <?php endforeach ?>
+                                </select>
                                 <div class="invalid-feedback">
-                                    <?= session('errors.status_karyawan'); ?>
+                                    <?= session('errors.role'); ?>
                                 </div>
-                                <label for="status_karyawan">Status Karyawan</label>
+                                <label for="role">Role</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control <?php if (session('errors.jenis_kelamin')) : ?>is-invalid<?php endif ?>" id="jenis_kelamin" name="jenis_kelamin" placeholder="Jenis Kelamin" value="<?= old('jenis_kelamin'); ?>" autocomplete="off">
+                                <select class="form-select form-control <?php if (session('errors.status_karyawan')) : ?>is-invalid<?php endif ?>" id="status_karyawan" name="status_karyawan" aria-label="Status Karyawan">
+                                    <option selected value="">Pilih Status Karyawan</option>
+                                    <option value="karyawan_kontrak">Karyawan Kontrak</option>
+                                    <option value="karyawan_tetap">Karyawan Tetap</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= session('errors.status_karyawan'); ?>
+                                </div>
+                                <label for="floatingSelect">Status Karyawan</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <select class="form-select form-control <?php if (session('errors.jenis_kelamin')) : ?>is-invalid<?php endif ?>" id="jenis_kelamin" name="jenis_kelamin" aria-label="Jenis Kelamin">
+                                    <option selected value="">Pilih Jenis Kelamin</option>
+                                    <option value="Laki-Laki">Laki-Laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
                                 <div class="invalid-feedback">
                                     <?= session('errors.jenis_kelamin'); ?>
                                 </div>
-                                <label for="jenis_kelamin">Jenis Kelamin</label>
+                                <label for="floatingSelect">Jenis Kelamin</label>
                             </div>
                         </div>
                         <div class="col-md-6">

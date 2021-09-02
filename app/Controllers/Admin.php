@@ -3,17 +3,29 @@
 namespace App\Controllers;
 
 use App\Models\KaryawanModel;
+use App\Models\DepartmentModel;
+use App\Models\RoleModel;
+use App\Models\UsersModel;
+use App\Models\GroupsusersModel;
 
 class Admin extends BaseController
 {
     protected $db, $table_users, $table_karyawan;
     protected $karyawanmodel;
+    protected $departmentmodel;
+    protected $rolemodel;
+    protected $usersmodel;
+    protected $groupsusersmodel;
 
     public function __construct()
     {
         $this->db = \Config\Database::connect();
         $this->table_users = $this->db->table('users');
         $this->karyawanmodel = new KaryawanModel();
+        $this->departmentmodel = new DepartmentModel();
+        $this->rolemodel = new RoleModel();
+        $this->usersmodel = new UsersModel();
+        $this->groupsusersmodel = new GroupsusersModel();
     }
 
     public function index()
@@ -22,6 +34,16 @@ class Admin extends BaseController
             'title' => 'Admin'
         ];
         echo view('/admin/index', $data);
+    }
+
+    public function add_akun()
+    {
+        $data = [
+            'title' => 'Add Akun',
+            'department' => $this->departmentmodel->getAlldepartment(),
+            'role' => $this->rolemodel->getAllrole()
+        ];
+        echo view('/admin/add_akun', $data);
     }
 
     public function akun_pengguna()
@@ -42,7 +64,7 @@ class Admin extends BaseController
 
     public function detail($id = 0)
     {
-        $this->table_users->select('users.id as userid, username, fullname, user_image, department, email, name');
+        $this->table_users->select('users.id as userid, username, fullname, user_image, department, email, name, phone, jenis_kelamin, tgl_lahir, status_karyawan, created_at, id_karyawan');
         $this->table_users->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->table_users->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->table_users->where('users.id', $id);
@@ -50,7 +72,9 @@ class Admin extends BaseController
 
         $data = [
             'title' => 'Akun Pengguna',
-            'user' => $query->getRow()
+            'user' => $query->getRow(),
+            'department' => $this->departmentmodel->getAlldepartment(),
+            'role' => $this->rolemodel->getAllrole()
         ];
 
         if (empty($data['user'])) {
@@ -60,12 +84,28 @@ class Admin extends BaseController
         echo view('/admin/detail', $data);
     }
 
-    public function add_akun()
+    public function save_profile($id = 0)
     {
-        $data = [
-            'title' => 'Add Akun'
-        ];
-        echo view('/admin/add_akun', $data);
+        $this->usersmodel->save([
+            'id' => $id,
+            'id_karyawan' => $this->request->getVar('detail_id_karyawan'),
+            'fullname' => $this->request->getVar('detail_fullname'),
+            'username' => $this->request->getVar('detail_username'),
+            'department' => $this->request->getVar('detail_department'),
+            'status_karyawan' => $this->request->getVar('detail_status_karyawan'),
+            'email' => $this->request->getVar('detail_email'),
+            'jenis_kelamin' => $this->request->getVar('detail_jenis_kelamin'),
+            'tgl_lahir' => $this->request->getVar('detail_tgl_lahir'),
+            'phone' => $this->request->getVar('detail_phone')
+        ]);
+
+        $group = $this->request->getVar('detail_role');
+        $this->groupsusersmodel->set('group_id', $group);
+        $this->groupsusersmodel->where('user_id', $id);
+        $this->groupsusersmodel->update();
+
+
+        return redirect()->to("/admin/detail/$id");
     }
 
     public function tambah_karyawan()
