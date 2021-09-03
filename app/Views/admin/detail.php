@@ -8,6 +8,11 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">PT.BPR Majesty Golden Raya</li>
             </ol>
+            <?php if (session()->getFlashdata('pesan_edit_profile')) : ?>
+                <div class="alert alert-success" role="alert">
+                    <?= session()->getFlashdata('pesan_edit_profile'); ?>
+                </div>
+            <?php endif ?>
             <div class="card mb-4">
                 <form action="/admin/save_profile/<?= $user->userid; ?>" method="POST">
                     <div class="row">
@@ -62,7 +67,7 @@
                         <div class="col-md-4">
                             <div class="form-floating my-3">
                                 <select class="form-select form-control" id="detail_role" name="detail_role" aria-label="role">
-                                    <option selected value="<?= $user->name ?>"><?= $user->name ?></option>
+                                    <option selected value="<?= $user->group_id ?>"><?= $user->name ?></option>
                                     <?php foreach ($role as $roles) : ?>
                                         <option value="<?= $roles['id']; ?>"> <?= $roles['name']; ?></option>
                                     <?php endforeach ?>
@@ -73,7 +78,13 @@
                         <div class="col-md-4">
                             <div class="form-floating my-3">
                                 <select class="form-select form-control" id="detail_status_karyawan" name="detail_status_karyawan" aria-label="Status Karyawan">
-                                    <option selected value="<?= $user->status_karyawan ?>"><?= $user->status_karyawan ?></option>
+                                    <option selected value="<?= $user->status_karyawan ?>">
+                                        <?php if ($user->status_karyawan == 'karyawan_kontrak') : ?>
+                                            Karyawan Kontrak
+                                        <?php elseif ($user->status_karyawan == 'karyawan_tetap') : ?>
+                                            Karyawan Tetap
+                                        <?php endif ?>
+                                    </option>
                                     <option value="karyawan_kontrak">Karyawan Kontrak</option>
                                     <option value="karyawan_tetap">Karyawan Tetap</option>
                                 </select>

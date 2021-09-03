@@ -14,4 +14,14 @@ class GroupsusersModel extends Model
     {
         return $this->findAll();
     }
+
+    public function getupdategroupsusers($id, $group_id)
+    {
+        $dbgroupid = $this->findColumn('user_id', $id);
+        if ($dbgroupid == $group_id) {
+            return $this->set('group_id', $group_id)->where('user_id', $id)->update();
+        } else {
+            return $this->set('group_id', $group_id)->where('user_id', $id)->update();
+        }
+    }
 }

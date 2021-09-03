@@ -92,7 +92,7 @@
                                 <select class="form-select form-control <?php if (session('errors.role')) : ?>is-invalid<?php endif ?>" id="role" name="role" aria-label="role">
                                     <option selected value="">Pilih Role</option>
                                     <?php foreach ($role as $roles) : ?>
-                                        <option value="<?= $roles['name']; ?>"> <?= $roles['name']; ?></option>
+                                        <option value="<?= $roles['id']; ?>"> <?= $roles['name']; ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <div class="invalid-feedback">

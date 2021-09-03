@@ -64,7 +64,7 @@ class Admin extends BaseController
 
     public function detail($id = 0)
     {
-        $this->table_users->select('users.id as userid, username, fullname, user_image, department, email, name, phone, jenis_kelamin, tgl_lahir, status_karyawan, created_at, id_karyawan');
+        $this->table_users->select('users.id as userid, username, fullname, user_image, department, email, name, phone, jenis_kelamin, tgl_lahir, status_karyawan, created_at, id_karyawan, group_id');
         $this->table_users->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->table_users->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
         $this->table_users->where('users.id', $id);
@@ -100,11 +100,9 @@ class Admin extends BaseController
         ]);
 
         $group = $this->request->getVar('detail_role');
-        $this->groupsusersmodel->set('group_id', $group);
-        $this->groupsusersmodel->where('user_id', $id);
-        $this->groupsusersmodel->update();
+        $this->groupsusersmodel->getupdategroupsusers($id, $group);
 
-
+        session()->setFlashdata('pesan_edit_profile', 'Detail Pengguna berhasil diupdate! <br> Jika terdapat perubahan pada role harap tunggu 10 menit kemudian silahkan login ulang kembali!');
         return redirect()->to("/admin/detail/$id");
     }
 
