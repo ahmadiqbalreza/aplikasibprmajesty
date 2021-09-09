@@ -38,6 +38,35 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Akun Pengguna
                         </a>
+                        <a class="nav-link <?php
+                                            if ($title == "Akses Pengguna") {
+                                                echo "active";
+                                            } ?>" href="/hrd/akses_pengguna">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Akses Pengguna
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_nomor_surat" aria-expanded="false" aria-controls="collapse_nomor_surat">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Nomor Surat
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapse_nomor_surat" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/hrd/add_karyawan_nosur">Tambah Karyawan</a>
+                                <a class="nav-link" href="/hrd/data_karyawan">Data Karyawan</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_inventaris" aria-expanded="false" aria-controls="collapse_inventaris">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Inventaris
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapse_inventaris" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/hrd/add_karyawan_nosur">Tambah Karyawan</a>
+                                <a class="nav-link" href="/hrd/data_karyawan">Data Karyawan</a>
+                            </nav>
+                        </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsecuti" aria-expanded="false" aria-controls="collapsecuti">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Cuti Online

@@ -71,8 +71,13 @@
                     <div class="card bg-primary text-white mb-4">
                         <div class="card-body">APLIKASI NOMOR SURAT</div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="/nomor_surat">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php if (user()->access_nomor_surat == '1') : ?>
+                                <a class="small text-white stretched-link" href="/nomor_surat">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php else : ?>
+                                <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#no_access_page">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php endif ?>
                         </div>
                     </div>
                 </div>
@@ -80,8 +85,13 @@
                     <div class="card bg-danger text-white mb-4">
                         <div class="card-body">APLIKASI INVENTARIS</div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="/inventaris">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php if (user()->access_inventaris == '1') : ?>
+                                <a class="small text-white stretched-link" href="/inventaris">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php else : ?>
+                                <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#no_access_page">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php endif ?>
                         </div>
                     </div>
                 </div>
@@ -89,8 +99,13 @@
                     <div class="card bg-success text-white mb-4">
                         <div class="card-body">APLIKASI CUTI ONLINE</div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="/cuti_online">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php if (user()->access_cuti_online == '1') : ?>
+                                <a class="small text-white stretched-link" href="/cuti_online">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php else : ?>
+                                <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#no_access_page">View Details</a>
+                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php endif ?>
                         </div>
                     </div>
                 </div>
@@ -98,7 +113,7 @@
                     <div class="card bg-warning text-white mb-4">
                         <div class="card-body">COMING SOON</div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Details</a>
+                            <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#no_access_page">View Details</a>
                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
@@ -107,4 +122,23 @@
             </div>
         </div>
     </main>
+
+
+    <!-- Modal No Access Page -->
+    <div class="modal fade" id="no_access_page" tabindex="-1" aria-labelledby="no_access_pageLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="no_access_pageLabel">Informasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Maaf anda tidak memiliki akses ke aplikasi tersebut!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?= $this->endSection(); ?>

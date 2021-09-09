@@ -39,6 +39,11 @@ $routes->get('/admin/index', 'Admin::index', ['filter' => 'role:Admin']);
 $routes->get('/hrd/akun_pengguna', 'Hrd::akun_pengguna', ['filter' => 'role:Admin,HRD']);
 $routes->get('/hrd/detail/(:num)', 'Hrd::detail/$1', ['filter' => 'role:Admin,HRD']);
 
+// Access Aplikasi
+$routes->get('/nomor_surat(:any)', 'Nomor_surat::index', ['filter' => 'accessnosur']);
+$routes->get('/inventaris(:any)', 'Inventaris::index', ['filter' => 'accessinventaris']);
+$routes->get('/cuti_online(:any)', 'Cuti_online::index', ['filter' => 'accesscutionline']);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

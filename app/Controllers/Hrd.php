@@ -96,7 +96,23 @@ class Hrd extends BaseController
         return redirect()->to("/hrd/detail/$id");
     }
 
-    public function tambah_karyawan()
+    public function akses_pengguna()
+    {
+        // $users = new \Myth\Auth\Models\UserModel();
+        // 'users' => $users->findAll()
+
+        $this->table_users->select('users.id as userid, username, email, name, access_nomor_surat, access_inventaris, access_cuti_online');
+        $this->table_users->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+        $this->table_users->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+        $query = $this->table_users->get();
+        $data = [
+            'title' => 'Akses Pengguna',
+            'users' => $query->getResult()
+        ];
+        echo view('/hrd/akses_pengguna', $data);
+    }
+
+    public function add_karyawan_nosur()
     {
         $data = [
             'title' => 'Tambah Karyawan',
