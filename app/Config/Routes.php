@@ -36,9 +36,8 @@ $routes->get('/', 'User::index');
 
 $routes->get('/admin', 'Admin::index', ['filter' => 'role:Admin']);
 $routes->get('/admin/index', 'Admin::index', ['filter' => 'role:Admin']);
-$routes->get('/admin/akun_pengguna', 'Admin::akun_pengguna', ['filter' => 'role:Admin']);
-$routes->get('/admin/tambah_karyawan', 'Admin::tambah_karyawan', ['filter' => 'role:Admin']);
-$routes->get('/admin/detail/(:num)', 'Admin::detail/$1', ['filter' => 'role:Admin']);
+$routes->get('/hrd/akun_pengguna', 'Hrd::akun_pengguna', ['filter' => 'role:Admin,HRD']);
+$routes->get('/hrd/detail/(:num)', 'Hrd::detail/$1', ['filter' => 'role:Admin,HRD']);
 
 /*
  * --------------------------------------------------------------------

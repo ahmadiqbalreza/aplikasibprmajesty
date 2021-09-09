@@ -87,7 +87,7 @@
                                 <label for="department">Department</label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <select class="form-select form-control <?php if (session('errors.role')) : ?>is-invalid<?php endif ?>" id="role" name="role" aria-label="role">
                                     <option selected value="">Pilih Role</option>
@@ -100,7 +100,7 @@
                                 </div>
                                 <label for="role">Role</label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
                                 <select class="form-select form-control <?php if (session('errors.status_karyawan')) : ?>is-invalid<?php endif ?>" id="status_karyawan" name="status_karyawan" aria-label="Status Karyawan">

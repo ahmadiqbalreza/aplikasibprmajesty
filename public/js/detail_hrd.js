@@ -1,3 +1,5 @@
+
+// Javascript Untuk Detail User pada Menu HRD
 var btn_edit_profil = document.getElementsByClassName('btn_edit_profile')[0];
 var btn_edit_simpan = document.getElementById("btn_edit_simpan");
 var id_karyawan = document.getElementById("detail_id_karyawan");
@@ -40,3 +42,5 @@ btn_edit_profil.addEventListener('click', function(event) {
         btn_edit_simpan.style.visibility = 'hidden';
       }
 });
+// =====================================================
+

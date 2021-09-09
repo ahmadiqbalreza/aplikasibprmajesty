@@ -191,7 +191,7 @@
                     var email = $('#email').val();
                     var department = $('#department').val();
                     $.ajax({
-                        url: '/admin/insert_table_karyawan',
+                        url: '/hrd/insert_table_karyawan',
                         type: 'post',
                         dataType: 'json',
                         data: {

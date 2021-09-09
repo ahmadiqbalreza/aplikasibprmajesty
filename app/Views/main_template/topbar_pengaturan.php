@@ -15,7 +15,7 @@
                 <?php if (in_groups('Admin')) : ?>
                     <li><a class="dropdown-item" href="/admin">Pengaturan</a></li>
                 <?php else : ?>
-                    <li><a class="dropdown-item" href="/user/pengaturan">Pengaturan</a></li>
+                    <li><a class="dropdown-item" href="/user/profil_saya">Pengaturan</a></li>
                 <?php endif; ?>
                 <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                 <li>

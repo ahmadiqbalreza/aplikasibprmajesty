@@ -5,7 +5,7 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <?php if (in_groups('Admin')) : ?>
-                        <div class="sb-sidenav-menu-heading">Admin Menu</div>
+                        <div class="sb-sidenav-menu-heading">Administrator</div>
                         <a class="nav-link <?php
                                             if ($title == "Admin") {
                                                 echo "active";
@@ -20,10 +20,21 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Add Akun
                         </a>
+
+                        <a class="nav-link<?php
+                                            if ($title == "Role Akun") {
+                                                echo "active";
+                                            } ?>" href="/admin/role_akun">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Role Akun
+                        </a>
+                    <?php endif ?>
+                    <?php if (in_groups('HRD') or in_groups('Admin')) : ?>
+                        <div class="sb-sidenav-menu-heading">Pengaturan HRD</div>
                         <a class="nav-link <?php
                                             if ($title == "Akun Pengguna") {
                                                 echo "active";
-                                            } ?>" href="/admin/akun_pengguna">
+                                            } ?>" href="/hrd/akun_pengguna">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Akun Pengguna
                         </a>
@@ -34,24 +45,16 @@
                         </a>
                         <div class="collapse" id="collapsecuti" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="/admin/tambah_karyawan">Tambah Karyawan</a>
-                                <a class="nav-link" href="/admin/data_karyawan">Data Karyawan</a>
+                                <a class="nav-link" href="/hrd/tambah_karyawan">Tambah Karyawan</a>
+                                <a class="nav-link" href="/hrd/data_karyawan">Data Karyawan</a>
                             </nav>
                         </div>
-
-                        <a class="nav-link<?php
-                                            if ($title == "Role Akun") {
-                                                echo "active";
-                                            } ?>" href="/admin/role_akun">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Role Akun
-                        </a>
                     <?php endif ?>
-                    <div class="sb-sidenav-menu-heading">Pengaturan Profil</div>
+                    <div class="sb-sidenav-menu-heading">Pengaturan Karyawan</div>
                     <a class="nav-link <?php
                                         if ($title == "Profil Saya") {
                                             echo "active";
-                                        } ?>" href="/user/pengaturan">
+                                        } ?>" href="/user/profil_saya">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                         Profil Saya
                     </a>

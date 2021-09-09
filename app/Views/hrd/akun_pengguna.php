@@ -38,7 +38,7 @@
                                     <td><?= $user->email; ?></td>
                                     <td><?= $user->name; ?></td>
                                     <td>
-                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title='Lihat Detail"' href="/admin/detail/<?= $user->userid; ?>" type="button" class="btn btn-outline-primary btn-sm">Detail</a>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title='Lihat Detail' href="/hrd/detail/<?= $user->userid; ?>" type="button" class="btn btn-outline-primary btn-sm">Detail</a>
                                     </td>
                                 </tr>
                                 <?php $i++; ?>

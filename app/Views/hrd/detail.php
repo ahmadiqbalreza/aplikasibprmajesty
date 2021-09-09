@@ -14,7 +14,7 @@
                 </div>
             <?php endif ?>
             <div class="card mb-4">
-                <form action="/admin/save_profile/<?= $user->userid; ?>" method="POST">
+                <form action="/hrd/save_profile/<?= $user->userid; ?>" method="POST">
                     <div class="row">
                         <div class="col">
                             <ol class="breadcrumb my-1 mx-1">
@@ -123,4 +123,5 @@
                 </form>
             </div>
     </main>
+    <script src="/js/detail_hrd.js"></script>
     <?= $this->endSection(); ?>
