@@ -17,4 +17,18 @@ class UsersModel extends Model
     {
         return $this->findAll();
     }
+
+    public function getbyId($id)
+    {
+        $sql = 'select * from users where id =' . $id;
+        $query =  $this->query($sql);
+        return $query->getRow();
+    }
+
+    public function updateAkses($id, $data)
+    {
+        //        print_r($this->db->getLastQuery());
+        $this->update($data, $id);
+        return $this->affectedRows();
+    }
 }
