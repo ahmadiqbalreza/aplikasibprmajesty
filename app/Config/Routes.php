@@ -38,11 +38,15 @@ $routes->get('/admin', 'Admin::index', ['filter' => 'role:Admin']);
 $routes->get('/admin/index', 'Admin::index', ['filter' => 'role:Admin']);
 $routes->get('/hrd/akun_pengguna', 'Hrd::akun_pengguna', ['filter' => 'role:Admin,HRD']);
 $routes->get('/hrd/detail/(:num)', 'Hrd::detail/$1', ['filter' => 'role:Admin,HRD']);
+$routes->get('/nomor_surat/penggunaan_nomor(:any)', 'Nomor_surat::penggunaan_nomor', ['filter' => 'role:Admin,HRD']);
 
 // Access Aplikasi
-$routes->get('/nomor_surat(:any)', 'Nomor_surat::index', ['filter' => 'accessnosur']);
-$routes->get('/inventaris(:any)', 'Inventaris::index', ['filter' => 'accessinventaris']);
-$routes->get('/cuti_online(:any)', 'Cuti_online::index', ['filter' => 'accesscutionline']);
+$routes->get('/nomor_surat', 'Nomor_surat::index', ['filter' => 'accessnosur']);
+$routes->get('/nomor_surat/(:any)', 'Nomor_surat::$1', ['filter' => 'accessnosur']);
+$routes->get('/inventaris', 'Inventaris::index', ['filter' => 'accessinventaris']);
+$routes->get('/inventaris/(:any)', 'Inventaris::$1', ['filter' => 'accessinventaris']);
+$routes->get('/cuti_online', 'Cuti_online::index', ['filter' => 'accesscutionline']);
+$routes->get('/cuti_online/(:any)', 'Cuti_online::$1', ['filter' => 'accesscutionline']);
 
 /*
  * --------------------------------------------------------------------

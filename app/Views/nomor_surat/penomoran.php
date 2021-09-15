@@ -14,13 +14,13 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nama_pegawai" name="nama_pegawai" value="Ahmad Iqbal Reza Fahmi" readonly>
+                            <input type="text" class="form-control" id="nama_pegawai" name="nama_pegawai" value="<?= user()->fullname; ?>" readonly>
                             <label for="nama_pegawai">Nama Pegawai</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="id_pegawai" name="id_pegawai" value="12345" readonly>
+                            <input type="text" class="form-control" id="id_pegawai" name="id_pegawai" value="<?= user()->id_karyawan; ?>" readonly>
                             <label for="id_pegawai">ID Pegawai</label>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="department_pegawai" name="department_pegawai" value="EDP IT" readonly>
+                            <input type="text" class="form-control" id="department_pegawai" name="department_pegawai" value="<?= user()->department; ?>" readonly>
                             <label for="department_pegawai">Department</label>
                         </div>
                     </div>

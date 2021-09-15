@@ -4,7 +4,7 @@
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Beranda</h1>
+            <h1 class="mt-4">Penggunaan Nomor Surat</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">PT.BPR Majesty Golden Raya</li>
             </ol>
@@ -21,7 +21,7 @@
                             Data Penggunaan Nomor Surat
                         </div>
                         <div class="col-2 text-end">
-                            <a href="/nomor_surat/export_penggunaan_surat_user" type="button" class="btn btn-primary btn-sm mr-2">Export</a>
+                            <a href="/nomor_surat/export_penggunaan_surat_all" type="button" class="btn btn-primary btn-sm mr-2">Export</a>
                         </div>
                     </div>
                 </div>

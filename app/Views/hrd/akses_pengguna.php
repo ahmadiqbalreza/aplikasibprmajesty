@@ -92,6 +92,7 @@
                     $('[name="sel_access_inventaris"]').val(data.access_inventaris);
                     $('[name="sel_access_cuti_online"]').val(data.access_cuti_online);
                     $('[name="id_kar"]').val(data.id);
+                    $('[name="username"]').val(data.username);
                     $('[name="id_karyawan"]').text('ID Karyawan : ' + data.id);
                     $('[name="nama_karyawan"]').text('Nama Karyawan : ' + data.fullname);
                     $('[name="username"]').text('Username : ' + data.username);
@@ -108,18 +109,6 @@
         }
 
         function save() {
-            $.ajax({
-                url: <?php echo base_url('/hrd/akses_update/') ?>,
-                type: 'post',
-                dataType: 'json',
-                data: $('#form_edit_akses').serialize(),
-                success: function(data) {
-                    alert(data);
-                }
-            });
-        }
-
-        function savee() {
             var url;
             var id_kar = $("#id_kar").val();
             if (save_method == 'add') {
@@ -157,6 +146,7 @@
                     <form action="#" id="form_edit_akses" name="form_edit_akses" method="POST">
                         <div class="row my-2 mx-2">
                             <input type="hidden" value="" name="id_kar" />
+                            <input type="hidden" value="" name="username" />
                             <h6 class="mb-1" name="id_karyawan"></h6>
                             <h6 class="mb-1" name="nama_karyawan"></h6>
                             <h6 class="mb-4" name="username"></h6>

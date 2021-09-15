@@ -17,7 +17,7 @@
                 <?php else : ?>
                     <li><a class="dropdown-item" href="/user/profil_saya">Pengaturan</a></li>
                 <?php endif; ?>
-                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                <li><a class="dropdown-item" href="/">Ke Halaman Utama</a></li>
                 <li>
                     <hr class="dropdown-divider" />
                 </li>

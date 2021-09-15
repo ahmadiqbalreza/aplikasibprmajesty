@@ -15,6 +15,11 @@ class NomorsuratModel extends Model
         return $this->findAll();
     }
 
+    public function getByid($id_karyawan)
+    {
+        return $this->where('id_pegawai', $id_karyawan)->findAll();
+    }
+
     public function getNomorsurat($variabel)
     {
         return $this->find($variabel);

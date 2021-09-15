@@ -8,10 +8,6 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">PT.BPR Majesty Golden Raya</li>
             </ol>
-            <?php if (in_groups('admin')) : ?>
-                <a href="/admin" class="btn btn-primary btn-sm">Admin</a>
-            <?php endif; ?>
-            <a href="#" class="btn btn-primary btn-sm">User</a>
             <div class="row my-3">
                 <div class="card mb-4">
                     <ol class="breadcrumb my-1 mx-1">
@@ -55,9 +51,9 @@
                                             <td><?= user()->department; ?></td>
                                         </tr>
                                         <tr>
-                                            <td>Bekerja Sejak</td>
+                                            <td>Tgl Akun dibuat</td>
                                             <td>:</td>
-                                            <td>@fat</td>
+                                            <td><?= user()->created_at->toLocalizedString('dd MMMM yyyy'); ?></td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -4,16 +4,25 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Main</div>
-                    <a class="nav-link active" href="/nomor_surat">
+                    <div class="sb-sidenav-menu-heading">Menu Utama</div>
+                    <a class="nav-link <?php
+                                        if ($title == "Beranda") {
+                                            echo "active";
+                                        } ?>" href="/nomor_surat">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         Beranda
                     </a>
-                    <a class="nav-link" href="/nomor_surat/penomoran/">
+                    <a class="nav-link <?php
+                                        if ($title == "Penomoran") {
+                                            echo "active";
+                                        } ?>" href="/nomor_surat/penomoran/">
                         <div class="sb-nav-link-icon"><i class="fas fa fa-plus-square"></i></div>
                         Nomor Surat Baru
                     </a>
-                    <a class="nav-link" href="/nomor_surat/cetak_surat/">
+                    <a class="nav-link <?php
+                                        if ($title == "Cetak Template Surat") {
+                                            echo "active";
+                                        } ?>" href="/nomor_surat/cetak_surat/">
                         <div class="sb-nav-link-icon"><i class="fas fa fa-book"></i></div>
                         Cetak Template Surat
                     </a>
@@ -21,6 +30,16 @@
                         <div class="sb-nav-link-icon"><i class="fas fa fa-info-circle"></i></div>
                         Petunjuk
                     </a>
+                    <?php if (in_groups('HRD') or in_groups('Admin')) : ?>
+                        <div class="sb-sidenav-menu-heading">Menu Tambahan</div>
+                        <a class="nav-link <?php
+                                            if ($title == "Penggunaan Nomor") {
+                                                echo "active";
+                                            } ?>" href="/nomor_surat/penggunaan_nomor">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Penggunaan Nomor
+                        </a>
+                    <?php endif ?>
                 </div>
             </div>
             <div class="sb-sidenav-footer">

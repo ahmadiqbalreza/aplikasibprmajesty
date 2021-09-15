@@ -100,7 +100,6 @@ class Hrd extends BaseController
     {
         // $users = new \Myth\Auth\Models\UserModel();
         // 'users' => $users->findAll()
-        helper(['form', 'url']);
         $this->table_users->select('users.id as userid, username, email, name, access_nomor_surat, access_inventaris, access_cuti_online');
         $this->table_users->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
         $this->table_users->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
@@ -120,14 +119,13 @@ class Hrd extends BaseController
 
     public function akses_update()
     {
-        helper(['form', 'url']);
-        $data = array(
+        $this->usersmodel->save([
             'id' => $this->request->getPost('id_kar'),
+            'username' => $this->request->getPost('username'),
             'access_nomor_surat' => $this->request->getPost('sel_access_nomor_surat'),
             'access_inventaris' => $this->request->getPost('sel_access_inventaris'),
             'access_cuti_online' => $this->request->getPost('sel_access_cuti_online'),
-        );
-        $this->usersmodel->updateAkses(array('id' => $this->request->getPost('id_kar')), $data);
+        ]);
         echo json_encode(array("status" => TRUE));
     }
 

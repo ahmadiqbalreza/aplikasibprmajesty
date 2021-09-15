@@ -19,8 +19,8 @@ class Nomor_surat extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Nomor Surat | APLIKASI BPRMGR',
-            'nomor_surat' => $this->nomorsuratmodel->getAllnomorsurat()
+            'title' => 'Beranda',
+            'nomor_surat' => $this->nomorsuratmodel->getByid(user()->id_karyawan)
         ];
 
         echo view('/nomor_surat/index', $data);
@@ -29,7 +29,7 @@ class Nomor_surat extends BaseController
     public function penomoran()
     {
         $data = [
-            'title' => 'Nomor Surat | APLIKASI BPRMGR',
+            'title' => 'Penomoran',
             'tanggal_sekarang' => $this->tanggal->toLocalizedString('dd MMMM yyyy'),
             'validation' => \Config\Services::validation()
         ];
@@ -117,7 +117,7 @@ class Nomor_surat extends BaseController
     public function nomor_baru()
     {
         $data = [
-            'title' => 'Nomor Surat | APLIKASI BPRMGR',
+            'title' => 'Penomoran',
             'nomor_baru' => $this->nomorsuratmodel->getLastnomorsurat(),
             'surat_baru' => $this->nomorsuratmodel->getLastsurat(),
             'tanggal_sekarang' => $this->tanggal->toLocalizedString('dd MMMM yyyy')
@@ -129,7 +129,7 @@ class Nomor_surat extends BaseController
     public function cetak_surat()
     {
         $data = [
-            'title' => 'Nomor Surat | APLIKASI BPRMGR',
+            'title' => 'Cetak Template Surat',
             'nomor_baru' => $this->nomorsuratmodel->getLastnomorsurat(),
             'surat_baru' => $this->nomorsuratmodel->getLastsurat(),
             'tanggal_sekarang' => $this->tanggal->toLocalizedString('dd MMMM yyyy')
@@ -195,7 +195,67 @@ class Nomor_surat extends BaseController
         $cetak_surat_lapnihil->saveAs('php://output');
     }
 
-    public function export_penggunaan_surat()
+    public function penggunaan_nomor()
+    {
+        $data = [
+            'title' => 'Penggunaan Nomor',
+            'nomor_surat' => $this->nomorsuratmodel->getAllnomorsurat()
+        ];
+
+        echo view('/nomor_surat/penggunaan_nomor', $data);
+    }
+
+    public function export_penggunaan_surat_user()
+    {
+        $data_nomor_surat = $this->nomorsuratmodel->getByid(user()->id_karyawan);
+        $export_nomor_surat = new Spreadsheet;
+        // Buat custom header pada file excel
+        $export_nomor_surat->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Data Penggunaan Nomor Surat PT. BPR Majesty Golden Raya')
+            ->setCellValue('A3', 'No')
+            ->setCellValue('B3', 'Nomor Surat')
+            ->setCellValue('C3', 'Perihal Surat')
+            ->setCellValue('D3', 'Tujuan Surat')
+            ->setCellValue('E3', 'Nama Pegawai')
+            ->setCellValue('F3', 'Tanggal Dibuat');
+
+        $kolom = 4;
+        $nomor = 1;
+        foreach ($data_nomor_surat as $data) {
+            $export_nomor_surat->setActiveSheetIndex(0)
+                ->setCellValue('A' . $kolom, $nomor)
+                ->setCellValue('B' . $kolom, $data['nomor_surat'])
+                ->setCellValue('C' . $kolom, $data['perihal_surat'])
+                ->setCellValue('D' . $kolom, $data['tujuan_surat'])
+                ->setCellValue('E' . $kolom, $data['nama_pegawai'])
+                ->setCellValue('F' . $kolom, $data['tanggal_dibuat']);
+            $kolom++;
+            $nomor++;
+        }
+        // Style tabel Excel
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('A')->setWidth(7);
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $export_nomor_surat->getActiveSheet()->getStyle('C:E')->getAlignment()->setWrapText(true);
+        $export_nomor_surat->getActiveSheet()->getStyle('A:F')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        $export_nomor_surat->getActiveSheet()->getStyle('A1:F1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $export_nomor_surat->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $export_nomor_surat->getActiveSheet()->getStyle('A')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $export_nomor_surat->getActiveSheet()->mergeCells('A1:F1');
+        $export_nomor_surat->getActiveSheet()->getStyle('A:F')->getAlignment()->setWrapText(true);
+
+        // Proses Export ke file excel
+        $writer = new Xlsx($export_nomor_surat);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Laporan Penggunaan Nomor Surat.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+    }
+
+    public function export_penggunaan_surat_all()
     {
         $data_nomor_surat = $this->nomorsuratmodel->getAllnomorsurat();
         $export_nomor_surat = new Spreadsheet;
@@ -223,7 +283,7 @@ class Nomor_surat extends BaseController
             $nomor++;
         }
         // Style tabel Excel
-        $export_nomor_surat->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $export_nomor_surat->getActiveSheet()->getColumnDimension('A')->setWidth(7);
         $export_nomor_surat->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $export_nomor_surat->getActiveSheet()->getColumnDimension('C')->setWidth(50);
         $export_nomor_surat->getActiveSheet()->getColumnDimension('D')->setWidth(20);

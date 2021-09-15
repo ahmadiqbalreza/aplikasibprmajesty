@@ -20,14 +20,6 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Add Akun
                         </a>
-
-                        <a class="nav-link<?php
-                                            if ($title == "Role Akun") {
-                                                echo "active";
-                                            } ?>" href="/admin/role_akun">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Role Akun
-                        </a>
                     <?php endif ?>
                     <?php if (in_groups('HRD') or in_groups('Admin')) : ?>
                         <div class="sb-sidenav-menu-heading">Pengaturan HRD</div>
