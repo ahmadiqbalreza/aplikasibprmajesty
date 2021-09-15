@@ -4,68 +4,86 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Sidebar</div>
-                    <a class="nav-link active" href="/pages/dashboard/">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Dashboard
-                    </a>
-                    <div class="sb-sidenav-menu-heading">Interface</div>
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        Layouts
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                            <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                        </nav>
-                    </div>
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                        Pages
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                Authentication
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="login.html">Login</a>
-                                    <a class="nav-link" href="register.html">Register</a>
-                                    <a class="nav-link" href="password.html">Forgot Password</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                Error
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="401.html">401 Page</a>
-                                    <a class="nav-link" href="404.html">404 Page</a>
-                                    <a class="nav-link" href="500.html">500 Page</a>
-                                </nav>
-                            </div>
-                        </nav>
-                    </div>
-                    <div class="sb-sidenav-menu-heading">Addons</div>
-                    <a class="nav-link" href="charts.html">
+                    <div class="sb-sidenav-menu-heading">Menu Utama</div>
+                    <a class="nav-link <?php
+                                        if ($title == "Beranda") {
+                                            echo "active";
+                                        } ?>" href="/inventaris">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                        Charts
+                        Beranda
                     </a>
-                    <a class="nav-link" href="tables.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Tables
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_inv_bc" aria-expanded="false" aria-controls="collapse_inv_bc">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Batam Center
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
+                    <div class="collapse <?php
+                                            if ($title == "Batam Center" or $title == "PKM" or $title == "PRK" or $title == "FNO" or $title == "FNB") {
+                                                echo "show";
+                                            } ?>" id="collapse_inv_bc" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/inventaris/bc/add">Tambah Data</a>
+                            <a class="nav-link <?php
+                                                if ($title == "Batam Center") {
+                                                    echo "active";
+                                                } ?>" href="/inventaris/bc">Data Inventaris</a>
+                            <a class="nav-link <?php
+                                                if ($title == "PKM") {
+                                                    echo "active";
+                                                } ?>" href="/inventaris/bc/pkm">Peralatan Komputer</a>
+                            <a class="nav-link <?php
+                                                if ($title == "PRK") {
+                                                    echo "active";
+                                                } ?>" href="/inventaris/bc/prk">Peralatan Kantor</a>
+                            <a class="nav-link <?php
+                                                if ($title == "FNO") {
+                                                    echo "active";
+                                                } ?>" href="/inventaris/bc/fno">Furniture Non Besi</a>
+                            <a class="nav-link <?php
+                                                if ($title == "FNB") {
+                                                    echo "active";
+                                                } ?>" href="/inventaris/bc/fnb">Furniture Besi</a>
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_inventaris" aria-expanded="false" aria-controls="collapse_inventaris">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Inventaris
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapse_inventaris" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/hrd/add_karyawan_nosur">Tambah Karyawan</a>
+                            <a class="nav-link" href="/hrd/data_karyawan">Data Karyawan</a>
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsecuti" aria-expanded="false" aria-controls="collapsecuti">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Cuti Online
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsecuti" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/hrd/tambah_karyawan">Tambah Karyawan</a>
+                            <a class="nav-link" href="/hrd/data_karyawan">Data Karyawan</a>
+                        </nav>
+                    </div>
                 </div>
             </div>
-            <div class="sb-sidenav-footer">
+            <div class="sb-sidenav-footer text-capitalize">
                 <div class="small">Logged in as:</div>
-                Start Bootstrap
+
+                <?php
+                $db = \Config\Database::connect();
+                $builder = $db->table('users');
+                $id = user()->id;
+                $builder->select('users.id as userid, username, email, name');
+                $builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+                $builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+                $builder->where('users.id', $id);
+                $query = $builder->get();
+                $data = $query->getRow();
+                echo  $data->name;
+                ?>
             </div>
         </nav>
     </div>

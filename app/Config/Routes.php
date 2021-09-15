@@ -43,10 +43,20 @@ $routes->get('/nomor_surat/penggunaan_nomor(:any)', 'Nomor_surat::penggunaan_nom
 // Access Aplikasi
 $routes->get('/nomor_surat', 'Nomor_surat::index', ['filter' => 'accessnosur']);
 $routes->get('/nomor_surat/(:any)', 'Nomor_surat::$1', ['filter' => 'accessnosur']);
-$routes->get('/inventaris', 'Inventaris::index', ['filter' => 'accessinventaris']);
-$routes->get('/inventaris/(:any)', 'Inventaris::$1', ['filter' => 'accessinventaris']);
 $routes->get('/cuti_online', 'Cuti_online::index', ['filter' => 'accesscutionline']);
 $routes->get('/cuti_online/(:any)', 'Cuti_online::$1', ['filter' => 'accesscutionline']);
+
+
+// Inventaris BPRMGR Batam Center
+$routes->get('/inventaris', 'Inventaris::index', ['filter' => 'accessinventaris']);
+$routes->get('/inventaris/bc', 'Inventaris::bc', ['filter' => 'accessinventaris']);
+$routes->get('/inventaris/bc/pkm', 'Inventaris::bc_pkm', ['filter' => 'accessinventaris']);
+$routes->get('/inventaris/bc/prk', 'Inventaris::bc_prk', ['filter' => 'accessinventaris']);
+$routes->get('/inventaris/bc/fno', 'Inventaris::bc_fno', ['filter' => 'accessinventaris']);
+$routes->get('/inventaris/bc/fnb', 'Inventaris::bc_fnb', ['filter' => 'accessinventaris']);
+
+
+
 
 /*
  * --------------------------------------------------------------------
