@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
+                    <table id="tabel_penggunaan_nomor" class="tabell">
                         <thead>
                             <tr>
                                 <th>No.</th>

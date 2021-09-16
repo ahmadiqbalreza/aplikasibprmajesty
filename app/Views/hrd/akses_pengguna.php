@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="tabel_akses">
+                    <table id="tabel_akses" class="tabell">
                         <thead>
                             <tr>
                                 <th class="text-center">No.</th>

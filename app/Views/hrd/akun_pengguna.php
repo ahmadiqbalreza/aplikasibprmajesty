@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
+                    <table id="tabel_akun_pengguna" class="tabell">
                         <thead>
                             <tr>
                                 <th>No.</th>

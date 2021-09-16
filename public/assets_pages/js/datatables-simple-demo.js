@@ -3,11 +3,11 @@ window.addEventListener('DOMContentLoaded', event => {
     // https://github.com/fiduswriter/Simple-DataTables/wiki
 
     const datatablesSimple = document.getElementById('datatablesSimple');
-    const tabel_akses = document.getElementById('tabel_akses');
+    const tabel_ = document.getElementsByClassName('tabell')[0];
     if (datatablesSimple) {
         new simpleDatatables.DataTable(datatablesSimple);
     }
-    if (tabel_akses) {
-        new simpleDatatables.DataTable(tabel_akses);
+    if (tabel_) {
+        new simpleDatatables.DataTable(tabel_);
     }
 });
