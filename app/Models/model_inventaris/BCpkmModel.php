@@ -16,4 +16,9 @@ class BCpkmModel extends Model
     {
         return $this->findAll();
     }
+
+    public function getbyNomorinventarisbcpkm($nomor_inventaris)
+    {
+        return $this->where('nomor_inventaris_pkm', $nomor_inventaris)->findAll();
+    }
 }

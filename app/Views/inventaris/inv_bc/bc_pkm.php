@@ -20,7 +20,8 @@
                             <i class="fas fa-table me-1"></i>
                             Data Inventaris Peralatan Komputer
                         </div>
-                        <div class="col-4 text-end">
+                        <div class="col text-end">
+                            <a href="#" type="button" class="btn btn-primary btn-sm mr-2">Add</a>
                             <a href="#" type="button" class="btn btn-primary btn-sm mr-2">Export</a>
                         </div>
                     </div>
@@ -35,8 +36,7 @@
                                 <th>Jumlah</th>
                                 <th>Lokasi</th>
                                 <th>Remark</th>
-                                <th>Update By</th>
-                                <th>Last Update</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,8 +49,10 @@
                                     <td><?= $pkm['jumlah_unit']; ?></td>
                                     <td><?= $pkm['lokasi']; ?></td>
                                     <td><?= $pkm['remark']; ?></td>
-                                    <td><?= $pkm['update_by']; ?></td>
-                                    <td><?= $pkm['last_update']; ?></td>
+                                    <td>
+                                        <a title='Edit' onclick="edit_bcpkmm(11)" type="button" class="btn btn-warning btn-sm">Edit</a>&nbsp;&nbsp;
+                                        <a href="/inventaris/bc/pkm/detail/<?= $pkm['nomor_inventaris_pkm']; ?>" type="button" class="btn btn-info btn-sm">Detail</a>
+                                    </td>
                                 </tr>
                                 <?php $i++; ?>
                             <?php endforeach; ?>
@@ -60,6 +62,74 @@
             </div>
         </div>
     </main>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tabel_bcpkm').DataTable();
+        });
+        var save_method; //for save method string
+        var table;
+
+        function edit_bcpkmm(nomor_inventaris_bcpkm) {
+            console.log(nomor_inventaris_bcpkm);
+        }
+
+        function edit_bcpkm(nomor_inventaris_bcpkm) {
+            save_method = 'update';
+            $('#form_edit_bcpkm')[0].reset(); // reset form on modals
+            <?php header('Content-type: application/json'); ?>
+            //Ajax Load data from ajax
+            $.ajax({
+                url: "<?php echo site_url('/inventaris/ajax_edit_bcpkm/') ?>" + nomor_inventaris_bcpkm,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+
+                    $('[name="nomor_inventaris_pkm"]').val(data.nomor_inventaris_pkm);
+
+                    $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal when complete loaded
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    alert('Error get data from ajax');
+                }
+            });
+        }
+    </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal_edit_bcpkm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_edit_bcpkmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_edit_bcpkmLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" id="form_edit_bcpkm" name="form_edit_bcpkm" method="POST">
+                        <div class="row my-2 mx-2">
+
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="nomor_inventaris_pkm" name="nomor_inventaris_pkm" autocomplete="off">
+                                        <label for="floatingSelect">Nomor Inventaris</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Tabel Responsive -->
@@ -73,8 +143,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 
     <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 

@@ -20,6 +20,7 @@ class Inventaris extends BaseController
         echo view('/inventaris/index', $data);
     }
 
+
     // Inventaris BPRMGR Batam Center
     public function bc()
     {
@@ -28,6 +29,7 @@ class Inventaris extends BaseController
         ];
         echo view('/inventaris/inv_bc/index', $data);
     }
+
     public function bc_pkm()
     {
         $data = [
@@ -36,6 +38,23 @@ class Inventaris extends BaseController
         ];
         echo view('/inventaris/inv_bc/bc_pkm', $data);
     }
+
+    public function bc_pkm_detail($nomor_inventaris)
+    {
+        $data = [
+            'title' => 'PKM',
+            'db_bcpkm' => $this->bcpkmmodel->getbyNomorinventarisbcpkm($nomor_inventaris),
+            'nomor_inventaris' => $nomor_inventaris
+        ];
+        echo view('/inventaris/inv_bc/bc_pkm_detail', $data);
+    }
+
+    public function ajax_edit_bcpkm($nomor_inventaris_bcpkm)
+    {
+        $data = $this->bcpkmmodel->getbyNomorinventarisbcpkm($nomor_inventaris_bcpkm);
+        echo json_encode($data);
+    }
+
     public function bc_prk()
     {
         $data = [
@@ -43,6 +62,7 @@ class Inventaris extends BaseController
         ];
         echo view('/inventaris/inv_bc/bc_prk', $data);
     }
+
     public function bc_fno()
     {
         $data = [
@@ -50,6 +70,7 @@ class Inventaris extends BaseController
         ];
         echo view('/inventaris/inv_bc/bc_fno', $data);
     }
+
     public function bc_fnb()
     {
         $data = [
