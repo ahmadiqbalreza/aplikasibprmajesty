@@ -7,18 +7,23 @@ use CodeIgniter\Model;
 class BCpkmModel extends Model
 {
     protected $table = 'inventaris_bc_pkm';
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $allowedFields = [
         'nomor_inventaris_pkm', 'nomor', 'tahun', 'deskripsi', 'kategori', 'jumlah_unit', 'lokasi', 'lokasi_kantor', 'image', 'remark', 'update_by', 'last_update'
     ];
 
     public function getAllbcpkm()
     {
-        return $this->findAll();
+        $this->select('nomor_inventaris_pkm,nomor, tahun,deskripsi,kategori,jumlah_unit,lokasi,lokasi_kantor,image,remark,update_by,last_update');
+        $query = $this->get();
+        return $query->getResult();
     }
 
     public function getbyNomorinventarisbcpkm($nomor_inventaris)
     {
-        return $this->where('nomor_inventaris_pkm', $nomor_inventaris)->findAll();
+        $this->select('nomor_inventaris_pkm,nomor, tahun,deskripsi,kategori,jumlah_unit,lokasi,lokasi_kantor,image,remark,update_by,last_update');
+        $this->where('nomor_inventaris_pkm', $nomor_inventaris);
+        $query = $this->get();
+        return $query->getResult();
     }
 }

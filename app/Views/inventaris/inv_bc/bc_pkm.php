@@ -21,7 +21,7 @@
                             Data Inventaris Peralatan Komputer
                         </div>
                         <div class="col text-end">
-                            <a href="#" type="button" class="btn btn-primary btn-sm mr-2">Add</a>
+                            <a title='Add' onclick="add_bcpkm()" type="button" class="btn btn-primary btn-sm mr-2">Add</a>
                             <a href="#" type="button" class="btn btn-primary btn-sm mr-2">Export</a>
                         </div>
                     </div>
@@ -44,14 +44,14 @@
                             <?php foreach ($db_bcpkm as $pkm) : ?>
                                 <tr>
                                     <td><?= $i; ?></td>
-                                    <td><?= $pkm['nomor_inventaris_pkm']; ?></td>
-                                    <td><?= $pkm['deskripsi']; ?></td>
-                                    <td><?= $pkm['jumlah_unit']; ?></td>
-                                    <td><?= $pkm['lokasi']; ?></td>
-                                    <td><?= $pkm['remark']; ?></td>
+                                    <td><?= $pkm->nomor_inventaris_pkm; ?></td>
+                                    <td><?= $pkm->deskripsi; ?></td>
+                                    <td><?= $pkm->jumlah_unit; ?></td>
+                                    <td><?= $pkm->lokasi; ?></td>
+                                    <td><?= $pkm->remark; ?></td>
                                     <td>
-                                        <a title='Edit' onclick="edit_bcpkmm(11)" type="button" class="btn btn-warning btn-sm">Edit</a>&nbsp;&nbsp;
-                                        <a href="/inventaris/bc/pkm/detail/<?= $pkm['nomor_inventaris_pkm']; ?>" type="button" class="btn btn-info btn-sm">Detail</a>
+                                        <a title='Edit' onclick="edit_bcpkm('<?= $pkm->nomor_inventaris_pkm; ?>')" type="button" class="btn btn-warning btn-sm">Edit</a>&nbsp;&nbsp;
+                                        <a href="/inventaris/bc/pkm/detail/<?= $pkm->nomor_inventaris_pkm; ?>" type="button" class="btn btn-info btn-sm">Detail</a>
                                     </td>
                                 </tr>
                                 <?php $i++; ?>
@@ -70,24 +70,36 @@
         var save_method; //for save method string
         var table;
 
-        function edit_bcpkmm(nomor_inventaris_bcpkm) {
-            console.log(nomor_inventaris_bcpkm);
+        function add_bcpkm() {
+            save_method = 'add';
+            $('#form_edit_bcpkm')[0].reset(); // reset form on modals
+            $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal
+            $('.modal-title').text('Add Detail Inventaris');
         }
 
-        function edit_bcpkm(nomor_inventaris_bcpkm) {
+        function edit_bcpkm(nomor_inventaris_pkm) {
             save_method = 'update';
             $('#form_edit_bcpkm')[0].reset(); // reset form on modals
             <?php header('Content-type: application/json'); ?>
             //Ajax Load data from ajax
             $.ajax({
-                url: "<?php echo site_url('/inventaris/ajax_edit_bcpkm/') ?>" + nomor_inventaris_bcpkm,
+                url: "<?php echo site_url('/inventaris/ajax_get_bcpkm/') ?>/" + nomor_inventaris_pkm,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
+                    console.log(data[0]);
+                    $('[name="nomor_inventaris_pkm"]').val(data[0].nomor_inventaris_pkm);
+                    $('[name="nomor"]').val(data[0].nomor);
+                    $('[name="tahun"]').val(data[0].tahun);
+                    $('[name="deskripsi"]').val(data[0].deskripsi);
+                    $('[name="kategori"]').val(data[0].kategori);
+                    $('[name="jumlah_unit"]').val(data[0].jumlah_unit);
+                    $('[name="lokasi"]').val(data[0].lokasi);
+                    $('[name="lokasi_kantor"]').val(data[0].lokasi_kantor);
+                    $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
+                    $('[name="remark"]').val(data[0].remark);
 
-                    $('[name="nomor_inventaris_pkm"]').val(data.nomor_inventaris_pkm);
-
+                    $('.modal-title').text('Edit Detail Inventaris');
                     $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal when complete loaded
 
                 },
@@ -97,6 +109,38 @@
                 }
             });
         }
+
+        function simpan_pkm() {
+            var url;
+            if (save_method == 'add') {
+                url = "<?php echo site_url('/inventaris/bcpkm_add/') ?>";
+            } else {
+                url = "<?php echo site_url('/inventaris/bcpkm_update/') ?>";
+            }
+            // ajax adding data to database
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "JSON",
+                data: $('#form_edit_bcpkm').serialize(),
+                success: function(data) {
+                    //if success close modal and reload ajax table
+                    $('#modal_edit_bcpkm').modal('hide');
+                    location.reload(); // for reload a page
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error adding / update data ' + $('#form_edit_bcpkm').serialize());
+                }
+            });
+        }
+
+        $("#nomor, #tahun").keyup(function() {
+            updatee();
+        });
+
+        function updatee() {
+            $("#nomor_inventaris_pkm").val($('#nomor').val() + " " + $('#tahun').val());
+        }
     </script>
 
     <!-- Modal -->
@@ -104,12 +148,23 @@
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal_edit_bcpkmLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="modal_edit_bcpkmLabel">Title</h5>
                 </div>
                 <div class="modal-body">
                     <form action="#" id="form_edit_bcpkm" name="form_edit_bcpkm" method="POST">
                         <div class="row my-2 mx-2">
+
+                            <div class="col-bg-6 text-center mb-3">
+                                <div class="form-group">
+                                    <img id="image" name="image" class="card-img-top mb-2" alt="Foto Barang" style="width: 15rem">
+                                    <br>
+                                    <div class="row justify-content-center">
+                                        <div class="col-6 justify-content-center">
+                                            <input type="file" class="form-control form-control-sm" id="customFile" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="col-bg-6">
                                 <div class="form-group">
@@ -119,13 +174,77 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="nomor" name="nomor" autocomplete="off">
+                                        <label for="floatingSelect">Nomor</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="tahun" name="tahun" autocomplete="off">
+                                        <label for="floatingSelect">Tahun</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="deskripsi" name="deskripsi" autocomplete="off">
+                                        <label for="floatingSelect">Deskripsi</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="kategori" name="kategori" autocomplete="off">
+                                        <label for="floatingSelect">Kategori</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="jumlah_unit" name="jumlah_unit" autocomplete="off">
+                                        <label for="floatingSelect">Jumlah Unit</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="lokasi" name="lokasi" autocomplete="off">
+                                        <label for="floatingSelect">Lokasi</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="lokasi_kantor" name="lokasi_kantor" autocomplete="off">
+                                        <label for="floatingSelect">Lokasi Kantor</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="remark" name="remark" autocomplete="off">
+                                        <label for="floatingSelect">Remark</label>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button title='Simpan' onclick="simpan_pkm()" type="button" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
@@ -144,8 +263,6 @@
 
     <!-- Optional JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 
     <!--   Datatables-->
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>

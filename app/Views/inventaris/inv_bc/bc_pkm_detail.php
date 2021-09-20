@@ -28,8 +28,8 @@
                     <?php foreach ($db_bcpkm as $pkm) : ?>
                         <div class="row justify-content-center">
                             <div class="card mb-2 text-center" style="width: 18rem;">
-                                <?php if ($pkm['image'] != null) : ?>
-                                    <img src="\img\inventaris\bc\pkm\<?= $pkm['image']; ?>" class="card-img-top" alt="Gambar Barang">
+                                <?php if ($pkm->image != null) : ?>
+                                    <img src="\img\inventaris\bc\pkm\<?= $pkm->image; ?>" class="card-img-top" alt="Gambar Barang">
                                 <?php else : ?>
                                     <h6>Data Gambar Tidak Ada!</h6>
                                 <?php endif; ?>
@@ -46,47 +46,47 @@
                                     <tr>
                                         <td>Deskripsi Barang</td>
                                         <td>:</td>
-                                        <td><?= $pkm['deskripsi']; ?></td>
+                                        <td><?= $pkm->deskripsi; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Tahun</td>
                                         <td>:</td>
-                                        <td><?= $pkm['tahun']; ?></td>
+                                        <td><?= $pkm->tahun; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Kategori</td>
                                         <td>:</td>
-                                        <td><?= $pkm['kategori']; ?></td>
+                                        <td><?= $pkm->kategori; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Jumlah Unit</td>
                                         <td>:</td>
-                                        <td><?= $pkm['jumlah_unit']; ?></td>
+                                        <td><?= $pkm->jumlah_unit; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Remark</td>
                                         <td>:</td>
-                                        <td><?= $pkm['remark']; ?></td>
+                                        <td><?= $pkm->remark; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Lokasi</td>
                                         <td>:</td>
-                                        <td><?= $pkm['lokasi']; ?></td>
+                                        <td><?= $pkm->lokasi; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Lokasi Kantor</td>
                                         <td>:</td>
-                                        <td><?= $pkm['lokasi_kantor']; ?></td>
+                                        <td><?= $pkm->lokasi_kantor; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Update By</td>
                                         <td>:</td>
-                                        <td><?= $pkm['update_by']; ?></td>
+                                        <td><?= $pkm->update_by; ?></td>
                                     </tr>
                                     <tr>
                                         <td>Last Update</td>
                                         <td>:</td>
-                                        <td><?= $pkm['last_update']; ?></td>
+                                        <td><?= $pkm->last_update; ?></td>
                                     </tr>
                                 </tbody>
                             </table>
