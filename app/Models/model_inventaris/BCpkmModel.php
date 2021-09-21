@@ -14,7 +14,7 @@ class BCpkmModel extends Model
 
     public function getAllbcpkm()
     {
-        $this->select('nomor_inventaris_pkm,nomor, tahun,deskripsi,kategori,jumlah_unit,lokasi,lokasi_kantor,image,remark,update_by,last_update');
+        $this->select('nomor_inventaris_pkm,nomor, tahun,deskripsi,kategori,jumlah_unit,lokasi,lokasi_kantor,image,remark,update_by,last_update')->orderBy('nomor', 'ASC');
         $query = $this->get();
         return $query->getResult();
     }

@@ -51,7 +51,6 @@ $routes->get('/cuti_online/(:any)', 'Cuti_online::$1', ['filter' => 'accesscutio
 $routes->get('/inventaris', 'Inventaris::index', ['filter' => 'accessinventaris']);
 $routes->get('/inventaris/bc', 'Inventaris::bc', ['filter' => 'accessinventaris']);
 $routes->get('/inventaris/bc/pkm', 'Inventaris::bc_pkm', ['filter' => 'accessinventaris']);
-$routes->get('/inventaris/bc/pkm/detail/(:any)', 'Inventaris::bc_pkm_detail/$1', ['filter' => 'accessinventaris']);
 $routes->get('/inventaris/bc/prk', 'Inventaris::bc_prk', ['filter' => 'accessinventaris']);
 $routes->get('/inventaris/bc/fno', 'Inventaris::bc_fno', ['filter' => 'accessinventaris']);
 $routes->get('/inventaris/bc/fnb', 'Inventaris::bc_fnb', ['filter' => 'accessinventaris']);

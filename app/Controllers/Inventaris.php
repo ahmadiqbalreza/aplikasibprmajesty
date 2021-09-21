@@ -39,25 +39,15 @@ class Inventaris extends BaseController
         echo view('/inventaris/inv_bc/bc_pkm', $data);
     }
 
-    public function bc_pkm_detail($nomor_inventaris)
-    {
-        $data = [
-            'title' => 'PKM',
-            'db_bcpkm' => $this->bcpkmmodel->getbyNomorinventarisbcpkm($nomor_inventaris),
-            'nomor_inventaris' => $nomor_inventaris
-        ];
-        echo view('/inventaris/inv_bc/bc_pkm_detail', $data);
-    }
-
     public function ajax_get_bcpkm($nomor_inventaris_pkm)
     {
         $data = $this->bcpkmmodel->getbyNomorinventarisbcpkm($nomor_inventaris_pkm);
         echo json_encode($data);
     }
 
-    public function bcpkm_update()
+    public function bcpkm_add()
     {
-        $this->bcpkmmodel->save([
+        $data = [
             'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
             'nomor' => $this->request->getPost('nomor'),
             'tahun' => $this->request->getPost('tahun'),
@@ -66,30 +56,39 @@ class Inventaris extends BaseController
             'jumlah_unit' => $this->request->getPost('jumlah_unit'),
             'lokasi' => $this->request->getPost('lokasi'),
             'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
-            'image' => 1,
+            'image' => $this->request->getPost('imagee'),
             'remark' => $this->request->getPost('remark'),
-            'update_by' => 'Iqbal',
-            'last_update' => "",
-        ]);
+            'update_by' => user()->fullname,
+            'last_update' => date('Y-m-d H:i:s'),
+        ];
+        $this->bcpkmmodel->insert($data);
         echo json_encode(array("status" => TRUE));
     }
 
-    public function bcpkm_updatee()
+    public function bcpkm_update()
     {
-        $this->bcpkmmodel->update([
-            'nomor_inventaris_pkm' => "BC-2012-PKM-1",
-            'nomor' => 1,
-            'tahun' => 2007,
-            'deskripsi' => "Laptop",
-            'kategori' => "PKM",
-            'jumlah_unit' => 1,
-            'lokasi' => "oke",
-            'lokasi_kantor' => "okee",
-            'image' => 1,
-            'remark' => "ya",
-            'update_by' => 'Iqbal',
-            'last_update' => "1",
-        ]);
+        $data = [
+            'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
+            'nomor' => $this->request->getPost('nomor'),
+            'tahun' => $this->request->getPost('tahun'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+            'kategori' => $this->request->getPost('kategori'),
+            'jumlah_unit' => $this->request->getPost('jumlah_unit'),
+            'lokasi' => $this->request->getPost('lokasi'),
+            'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
+            'image' => $this->request->getPost('imagee'),
+            'remark' => $this->request->getPost('remark'),
+            'update_by' => user()->fullname,
+            'last_update' => date('Y-m-d H:i:s'),
+        ];
+        $this->bcpkmmodel->where('nomor_inventaris_pkm', $this->request->getPost('nomor_inventaris_pkm'))->set($data)->update();
+        echo json_encode(array("status" => TRUE));
+    }
+
+    public function bcpkm_delete($nomor_inventaris_pkm)
+    {
+        $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->delete();
+        echo json_encode(array("status" => TRUE));
     }
 
     public function bc_prk()
