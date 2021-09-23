@@ -44,7 +44,7 @@
                             <?php foreach ($db_bcpkm as $pkm) : ?>
                                 <tr>
                                     <td><?= $i; ?></td>
-                                    <td><?= $pkm->nomor_inventaris_pkm; ?></td>
+                                    <td><a href="#" onclick="view_bcpkm('<?= $pkm->nomor_inventaris_pkm; ?>')"><?= $pkm->nomor_inventaris_pkm; ?><a></td>
                                     <td><?= $pkm->deskripsi; ?></td>
                                     <td><?= $pkm->jumlah_unit; ?></td>
                                     <td><?= $pkm->lokasi; ?></td>
@@ -64,173 +64,6 @@
         </div>
     </main>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#tabel_bcpkm').DataTable();
-        });
-        var save_method; //for save method string
-        var table;
-
-        function add_bcpkm() {
-            save_method = 'add';
-            $('#form_edit_bcpkm')[0].reset(); // reset form on modals
-            $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal
-            $('.modal-title').text('Add Detail Inventaris');
-        }
-
-        function edit_bcpkm(nomor_inventaris_pkm) {
-            save_method = 'update';
-            $('#form_edit_bcpkm')[0].reset(); // reset form on modals
-            <?php header('Content-type: application/json'); ?>
-            //Ajax Load data from ajax
-            $.ajax({
-                url: "<?php echo site_url('/inventaris/ajax_get_bcpkm/') ?>/" + nomor_inventaris_pkm,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    console.log(data[0]);
-                    $('[name="nomor_inventaris_pkm"]').val(data[0].nomor_inventaris_pkm);
-                    $('[name="nomor"]').val(data[0].nomor);
-                    $('[name="tahun"]').val(data[0].tahun);
-                    $('[name="deskripsi"]').val(data[0].deskripsi);
-                    $('[name="kategori"]').val(data[0].kategori);
-                    $('[name="jumlah_unit"]').val(data[0].jumlah_unit);
-                    $('[name="lokasi"]').val(data[0].lokasi);
-                    $('[name="lokasi_kantor"]').val(data[0].lokasi_kantor);
-                    $('[name="imagee"]').val(data[0].image);
-                    $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
-                    $('[name="remark"]').val(data[0].remark);
-
-                    $('.modal-title').text('Edit Detail Inventaris');
-                    $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal when complete loaded
-
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Ada sesuatu yang error nih!, Coba deh kamu tanyakan ke bagian IT!'
-                    })
-                }
-            });
-        }
-
-        function simpan_pkm() {
-            var url;
-            if (save_method == 'add') {
-                url = "<?php echo site_url('/inventaris/bcpkm_add/') ?>";
-            } else {
-                url = "<?php echo site_url('/inventaris/bcpkm_update/') ?>";
-            }
-            // ajax adding data to database
-            $.ajax({
-                url: url,
-                type: "POST",
-                dataType: "JSON",
-                data: $('#form_edit_bcpkm').serialize(),
-                success: function(data) {
-                    //if success close modal and reload ajax table
-                    $('#modal_edit_bcpkm').modal('hide');
-                    Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Data berhasil disimpan ke database!',
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Oke!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload(); // for reload a page
-                        }
-                    })
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Ada sesuatu yang error nih!, Coba deh kamu tanyakan ke bagian IT!'
-                    })
-                }
-            });
-        }
-
-        function hapus_bcpkm(nomor_inventaris_pkm) {
-            Swal.fire({
-                title: 'Anda yakin ingin menghapus data ini?',
-                text: "Data akan terhapus secara permanen!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Batal',
-                confirmButtonText: 'Ya, Hapus!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "<?php echo site_url('/inventaris/bcpkm_delete/') ?>/" + nomor_inventaris_pkm,
-                        type: "POST",
-                        dataType: "JSON",
-                        success: function(data) {
-                            Swal.fire(
-                                'Berhasil dihapus!',
-                                'Data berhasil dihapus dari database.',
-                                'success'
-                            ).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                            })
-
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            alert('Error deleting data');
-                        }
-                    });
-                }
-            })
-        }
-
-        function view_bcpkm(nomor_inventaris_pkm) {
-            $('#form_detail_bcpkm')[0].reset(); // reset form on modals
-            <?php header('Content-type: application/json'); ?>
-            //Ajax Load data from ajax
-            $.ajax({
-                url: "<?php echo site_url('/inventaris/ajax_get_bcpkm/') ?>/" + nomor_inventaris_pkm,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-                    console.log(data[0]);
-                    $('[name="nomor_inventaris_pkm"]').text(data[0].nomor_inventaris_pkm);
-                    $('[name="nomor"]').text(data[0].nomor);
-                    $('[name="tahun"]').text(data[0].tahun);
-                    $('[name="deskripsi"]').text(data[0].deskripsi);
-                    $('[name="kategori"]').text(data[0].kategori);
-                    $('[name="jumlah_unit"]').text(data[0].jumlah_unit);
-                    $('[name="lokasi"]').text(data[0].lokasi);
-                    $('[name="lokasi_kantor"]').text(data[0].lokasi_kantor);
-                    $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
-                    $('[name="remark"]').text(data[0].remark);
-                    $('[name="update_by"]').text(data[0].update_by);
-                    $('[name="last_update"]').text(data[0].last_update);
-
-                    $('.modal-title').text('Detail Inventaris');
-                    $('#modal_detail_bcpkm').modal('show'); // show bootstrap modal when complete loaded
-
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                    alert('Error get data from ajax');
-                }
-            });
-        }
-
-        $("#nomor, #tahun").keyup(function() {
-            updatee();
-        });
-
-        function updatee() {
-            $("#nomor_inventaris_pkm").val($('#nomor').val() + " " + $('#tahun').val());
-        }
-    </script>
 
     <!-- Modal Edit -->
     <div class="modal fade" id="modal_edit_bcpkm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_edit_bcpkmLabel" aria-hidden="true">
@@ -249,8 +82,11 @@
                                     <br>
                                     <div class="row justify-content-center">
                                         <div class="col-6 justify-content-center">
-                                            <input type="file" id="image" name="image" class="form-control form-control-sm" />
-                                            <input type="text" class="form-control visually-hidden" id="imagee" name="imagee" autocomplete="off">
+                                            <input type="file" id="foto_barang" name="foto_barang" class="form-control form-control-sm" />
+                                            <div class="invalid-feedback error_foto_barang">
+
+                                            </div>
+                                            <input type="text" class="form-control visually-hidden" id="imageee" name="imageee" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -260,6 +96,9 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="nomor_inventaris_pkm" name="nomor_inventaris_pkm" autocomplete="off">
+                                        <div class="invalid-feedback errornomor_inventaris_pkm">
+
+                                        </div>
                                         <label for="floatingSelect">Nomor Inventaris</label>
                                     </div>
                                 </div>
@@ -335,6 +174,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button title='Simpan' onclick="simpan_pkm()" type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="btntes" class="btn btn-secondary">TES</button>
                 </div>
             </div>
         </div>
@@ -449,6 +289,212 @@
                 responsive: true
             });
         });
+    </script>
+
+    <script>
+        const inpfile = document.getElementById("foto_barang");
+        const btntes = document.getElementById("btntes");
+
+        btntes.addEventListener('click', function(event) {
+            const xhr = new XMLHttpRequest();
+            const formdata = new FormData();
+            // console.log(inpfile.files);
+
+            // formdata.append("foto_barang", file);
+
+            xhr.open("post", "upload.php");
+            xhr.send(formdata);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tabel_bcpkm').DataTable();
+        });
+        var save_method; //for save method string
+        var table;
+
+        function add_bcpkm() {
+            save_method = 'add';
+            $('#form_edit_bcpkm')[0].reset(); // reset form on modals
+            $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal
+            $('.modal-title').text('Add Detail Inventaris');
+        }
+
+        function edit_bcpkm(nomor_inventaris_pkm) {
+            save_method = 'update';
+            $('#form_edit_bcpkm')[0].reset(); // reset form on modals
+            <?php header('Content-type: application/json'); ?>
+            //Ajax Load data from ajax
+            $.ajax({
+                url: "<?php echo site_url('/inventaris/ajax_get_bcpkm/') ?>/" + nomor_inventaris_pkm,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data[0]);
+                    $('[name="nomor_inventaris_pkm"]').val(data[0].nomor_inventaris_pkm);
+                    $('[name="nomor"]').val(data[0].nomor);
+                    $('[name="tahun"]').val(data[0].tahun);
+                    $('[name="deskripsi"]').val(data[0].deskripsi);
+                    $('[name="kategori"]').val(data[0].kategori);
+                    $('[name="jumlah_unit"]').val(data[0].jumlah_unit);
+                    $('[name="lokasi"]').val(data[0].lokasi);
+                    $('[name="lokasi_kantor"]').val(data[0].lokasi_kantor);
+                    $('[name="imagee"]').val(data[0].image);
+                    $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
+                    $('[name="remark"]').val(data[0].remark);
+
+                    $('.modal-title').text('Edit Detail Inventaris');
+                    $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal when complete loaded
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Ada sesuatu yang error nih!, Coba deh kamu tanyakan ke bagian IT!'
+                    })
+                }
+            });
+        }
+
+        function simpan_pkm() {
+            var url;
+            if (save_method == 'add') {
+                url = "<?php echo site_url('/inventaris/bcpkm_add/') ?>";
+            } else {
+                url = "<?php echo site_url('/inventaris/bcpkm_update/') ?>";
+            }
+            // ajax adding data to database
+            var nomor_inventaris_pkm = $('#nomor_inventaris_pkm').val();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                data: $('#form_edit_bcpkm').serialize(),
+                success: function(data) {
+                    //if success close modal and reload ajax table
+                    if (data.error) {
+                        if (data.error.foto_barang) {
+                            $('#foto_barang').addClass('is-invalid');
+                            $('.error_foto_barang').html(data.error.foto_barang);
+                        } else {
+                            $('#foto_barang').removeClass('is-invalid');
+                            $('.error_foto_barang').html('');
+                        }
+
+                        if (data.error.nomor_inventaris_pkm) {
+                            $('#nomor_inventaris_pkm').addClass('is-invalid');
+                            $('.errornomor_inventaris_pkm').html(data.error.nomor_inventaris_pkm);
+                        } else {
+                            $('#nomor_inventaris_pkm').removeClass('is-invalid');
+                            $('.errornomor_inventaris_pkm').html('');
+                        }
+
+                    } else {
+                        $('#modal_edit_bcpkm').modal('hide');
+                        // console.log(data[0].error);
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: 'Data berhasil disimpan ke database!',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Oke!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // for reload a page
+                            }
+                        })
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown, data) {
+                    alert(data);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Ada sesuatu yang error nih!, Coba deh kamu tanyakan ke bagian IT! Kesalahan:'
+                    })
+                }
+            });
+        }
+
+        function hapus_bcpkm(nomor_inventaris_pkm) {
+            Swal.fire({
+                title: 'Anda yakin ingin menghapus data ini?',
+                text: "Data akan terhapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "<?php echo site_url('/inventaris/bcpkm_delete/') ?>/" + nomor_inventaris_pkm,
+                        type: "POST",
+                        dataType: "JSON",
+                        success: function(data) {
+                            Swal.fire(
+                                'Berhasil dihapus!',
+                                'Data berhasil dihapus dari database.',
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert('Error deleting data');
+                        }
+                    });
+                }
+            })
+        }
+
+        function view_bcpkm(nomor_inventaris_pkm) {
+            $('#form_detail_bcpkm')[0].reset(); // reset form on modals
+            <?php header('Content-type: application/json'); ?>
+            //Ajax Load data from ajax
+            $.ajax({
+                url: "<?php echo site_url('/inventaris/ajax_get_bcpkm/') ?>/" + nomor_inventaris_pkm,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data[0]);
+                    $('[name="nomor_inventaris_pkm"]').text(data[0].nomor_inventaris_pkm);
+                    $('[name="nomor"]').text(data[0].nomor);
+                    $('[name="tahun"]').text(data[0].tahun);
+                    $('[name="deskripsi"]').text(data[0].deskripsi);
+                    $('[name="kategori"]').text(data[0].kategori);
+                    $('[name="jumlah_unit"]').text(data[0].jumlah_unit);
+                    $('[name="lokasi"]').text(data[0].lokasi);
+                    $('[name="lokasi_kantor"]').text(data[0].lokasi_kantor);
+                    $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
+                    $('[name="remark"]').text(data[0].remark);
+                    $('[name="update_by"]').text(data[0].update_by);
+                    $('[name="last_update"]').text(data[0].last_update);
+
+                    $('.modal-title').text('Detail Inventaris');
+                    $('#modal_detail_bcpkm').modal('show'); // show bootstrap modal when complete loaded
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    alert('Error get data from ajax');
+                }
+            });
+        }
+
+        $("#nomor, #tahun").keyup(function() {
+            updatee();
+        });
+
+        function updatee() {
+            $("#nomor_inventaris_pkm").val($('#nomor').val() + " " + $('#tahun').val());
+        }
     </script>
 
     <?= $this->endSection(); ?>

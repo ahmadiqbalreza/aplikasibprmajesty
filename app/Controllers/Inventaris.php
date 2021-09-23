@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\model_inventaris\BCpkmModel;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 class Inventaris extends BaseController
 {
@@ -34,7 +35,8 @@ class Inventaris extends BaseController
     {
         $data = [
             'title' => 'PKM',
-            'db_bcpkm' => $this->bcpkmmodel->getAllbcpkm()
+            'db_bcpkm' => $this->bcpkmmodel->getAllbcpkm(),
+            'validation' => \Config\Services::validation()
         ];
         echo view('/inventaris/inv_bc/bc_pkm', $data);
     }
@@ -47,22 +49,69 @@ class Inventaris extends BaseController
 
     public function bcpkm_add()
     {
-        $data = [
-            'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
-            'nomor' => $this->request->getPost('nomor'),
-            'tahun' => $this->request->getPost('tahun'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'kategori' => $this->request->getPost('kategori'),
-            'jumlah_unit' => $this->request->getPost('jumlah_unit'),
-            'lokasi' => $this->request->getPost('lokasi'),
-            'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
-            'image' => $this->request->getPost('imagee'),
-            'remark' => $this->request->getPost('remark'),
-            'update_by' => user()->fullname,
-            'last_update' => date('Y-m-d H:i:s'),
-        ];
-        $this->bcpkmmodel->insert($data);
-        echo json_encode(array("status" => TRUE));
+        // ===== Validasi ======= 
+        // if ($this->request->isAJAX()) {
+
+        $validation = \Config\Services::validation();
+        $valid = $this->validate(
+            [
+                'foto_barang' => [
+                    'rules' => 'uploaded[foto_barang]|max_size[foto_barang]|is_image[foto_barang]|mime_in[foto_barang,image/jpg,image/jpeg,image/png]',
+                    'errors' => [
+                        'uploaded' => 'Foto tidak boleh kosong!',
+                        'max_size' => 'Ukuran gambar terlalu besar!',
+                        'is_image' => 'Yang anda pilih bukan file gambar!',
+                        'mime_in' => 'Yang anda pilih bukan file gambarrr!',
+                    ]
+                ],
+                'nomor_inventaris_pkm' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Nomor Inventaris harus diisi!',
+                    ]
+                ],
+            ]
+        );
+
+        if (!$valid) {
+            $msg = [
+                'error' => [
+                    'foto_barang' => $validation->getError('foto_barang'),
+                    'nomor_inventaris_pkm' => $validation->getError('nomor_inventaris_pkm'),
+                ]
+            ];
+            echo json_encode($msg);
+        } else {
+            $file_foto_barang = $this->request->getFile('foto_barang');
+            $file_foto_barang->move('/img/inventaris/bc/pkm');
+            $nama_foto_barang = $file_foto_barang->getName();
+            $data = [
+                'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
+                'nomor' => $this->request->getPost('nomor'),
+                'tahun' => $this->request->getPost('tahun'),
+                'deskripsi' => $this->request->getPost('deskripsi'),
+                'kategori' => $this->request->getPost('kategori'),
+                'jumlah_unit' => $this->request->getPost('jumlah_unit'),
+                'lokasi' => $this->request->getPost('lokasi'),
+                'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
+                'image' => 2,
+                'remark' => $this->request->getPost('remark'),
+                'update_by' => user()->fullname,
+                'last_update' => date('Y-m-d H:i:s'),
+            ];
+            $this->bcpkmmodel->insert($data);
+            $stat = [
+                'status' => "TRUE",
+            ];
+            echo json_encode($stat);
+            // echo json_encode(array("status" => TRUE));
+        }
+        // } else {
+        //     exit('Maaf tidak dapat diproses');
+        // }
+
+        // =======================
+
     }
 
     public function bcpkm_update()
