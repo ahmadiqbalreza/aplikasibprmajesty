@@ -95,7 +95,7 @@
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="nomor_inventaris_pkm" name="nomor_inventaris_pkm" autocomplete="off">
+                                        <input type="text" class="form-control" id="nomor_inventaris_pkm" name="nomor_inventaris_pkm" autocomplete="off" disabled>
                                         <div class="invalid-feedback errornomor_inventaris_pkm">
 
                                         </div>
@@ -106,15 +106,10 @@
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="nomor" name="nomor" autocomplete="off">
-                                        <label for="floatingSelect">Nomor</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-bg-6">
-                                <div class="form-group">
-                                    <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="tahun" name="tahun" autocomplete="off">
+                                        <div class="invalid-feedback errortahun">
+
+                                        </div>
                                         <label for="floatingSelect">Tahun</label>
                                     </div>
                                 </div>
@@ -122,7 +117,21 @@
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="nomor" name="nomor" autocomplete="off">
+                                        <div class="invalid-feedback errornomor">
+
+                                        </div>
+                                        <label for="floatingSelect">Nomor</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="deskripsi" name="deskripsi" autocomplete="off">
+                                        <div class="invalid-feedback errordeskripsi">
+
+                                        </div>
                                         <label for="floatingSelect">Deskripsi</label>
                                     </div>
                                 </div>
@@ -131,6 +140,9 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="kategori" name="kategori" autocomplete="off">
+                                        <div class="invalid-feedback errorkategori">
+
+                                        </div>
                                         <label for="floatingSelect">Kategori</label>
                                     </div>
                                 </div>
@@ -139,6 +151,9 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="jumlah_unit" name="jumlah_unit" autocomplete="off">
+                                        <div class="invalid-feedback errorjumlah_unit">
+
+                                        </div>
                                         <label for="floatingSelect">Jumlah Unit</label>
                                     </div>
                                 </div>
@@ -147,6 +162,9 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="lokasi" name="lokasi" autocomplete="off">
+                                        <div class="invalid-feedback errorlokasi">
+
+                                        </div>
                                         <label for="floatingSelect">Lokasi</label>
                                     </div>
                                 </div>
@@ -155,6 +173,9 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="lokasi_kantor" name="lokasi_kantor" autocomplete="off">
+                                        <div class="invalid-feedback errorlokasi_kantor">
+
+                                        </div>
                                         <label for="floatingSelect">Lokasi Kantor</label>
                                     </div>
                                 </div>
@@ -163,6 +184,9 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="remark" name="remark" autocomplete="off">
+                                        <div class="invalid-feedback errorremark">
+
+                                        </div>
                                         <label for="floatingSelect">Remark</label>
                                     </div>
                                 </div>
@@ -296,14 +320,18 @@
         const btntes = document.getElementById("btntes");
 
         btntes.addEventListener('click', function(event) {
-            const xhr = new XMLHttpRequest();
-            const formdata = new FormData();
+            // const xhr = new XMLHttpRequest();
+            // const formdata = new FormData();
             // console.log(inpfile.files);
 
-            // formdata.append("foto_barang", file);
+            // formdata.append("foto_barang", inpfile.files);
 
-            xhr.open("post", "upload.php");
-            xhr.send(formdata);
+            // xhr.open("post", '/inventaris/bcpkm_add/');
+            // xhr.send(formdata);
+            var formDataPKM = new FormData();
+            // Attach file
+            formDataPKM.append('foto_barang', $('#foto_barang')[0].files[0]);
+            console.log(inpfile.files);
         });
     </script>
 
@@ -367,11 +395,27 @@
             }
             // ajax adding data to database
             var nomor_inventaris_pkm = $('#nomor_inventaris_pkm').val();
+
+            var formDataPKM = new FormData();
+            // Attach file
+            formDataPKM.append('foto_barang', $('#foto_barang')[0].files[0]);
+            formDataPKM.append('nomor_inventaris_pkm', $('#nomor_inventaris_pkm').val());
+            formDataPKM.append('nomor', $('#nomor').val());
+            formDataPKM.append('tahun', $('#tahun').val());
+            formDataPKM.append('deskripsi', $('#deskripsi').val());
+            formDataPKM.append('kategori', $('#kategori').val());
+            formDataPKM.append('jumlah_unit', $('#jumlah_unit').val());
+            formDataPKM.append('lokasi', $('#lokasi').val());
+            formDataPKM.append('lokasi_kantor', $('#lokasi_kantor').val());
+            formDataPKM.append('remark', $('#remark').val());
+
             $.ajax({
                 url: url,
                 type: "POST",
-                dataType: "json",
-                data: $('#form_edit_bcpkm').serialize(),
+                dataType: "JSON",
+                data: formDataPKM,
+                contentType: false,
+                processData: false,
                 success: function(data) {
                     //if success close modal and reload ajax table
                     if (data.error) {
@@ -383,12 +427,68 @@
                             $('.error_foto_barang').html('');
                         }
 
-                        if (data.error.nomor_inventaris_pkm) {
-                            $('#nomor_inventaris_pkm').addClass('is-invalid');
-                            $('.errornomor_inventaris_pkm').html(data.error.nomor_inventaris_pkm);
+                        if (data.error.nomor) {
+                            $('#nomor').addClass('is-invalid');
+                            $('.errornomor').html(data.error.nomor);
                         } else {
-                            $('#nomor_inventaris_pkm').removeClass('is-invalid');
-                            $('.errornomor_inventaris_pkm').html('');
+                            $('#nomor').removeClass('is-invalid');
+                            $('.errornomor').html('');
+                        }
+
+                        if (data.error.tahun) {
+                            $('#tahun').addClass('is-invalid');
+                            $('.errortahun').html(data.error.tahun);
+                        } else {
+                            $('#tahun').removeClass('is-invalid');
+                            $('.errortahun').html('');
+                        }
+
+                        if (data.error.deskripsi) {
+                            $('#deskripsi').addClass('is-invalid');
+                            $('.errordeskripsi').html(data.error.deskripsi);
+                        } else {
+                            $('#deskripsi').removeClass('is-invalid');
+                            $('.errordeskripsi').html('');
+                        }
+
+                        if (data.error.kategori) {
+                            $('#kategori').addClass('is-invalid');
+                            $('.errorkategori').html(data.error.kategori);
+                        } else {
+                            $('#kategori').removeClass('is-invalid');
+                            $('.errorkategori').html('');
+                        }
+
+                        if (data.error.jumlah_unit) {
+                            $('#jumlah_unit').addClass('is-invalid');
+                            $('.errorjumlah_unit').html(data.error.jumlah_unit);
+                        } else {
+                            $('#jumlah_unit').removeClass('is-invalid');
+                            $('.errorjumlah_unit').html('');
+                        }
+
+                        if (data.error.lokasi) {
+                            $('#lokasi').addClass('is-invalid');
+                            $('.errorlokasi').html(data.error.lokasi);
+                        } else {
+                            $('#lokasi').removeClass('is-invalid');
+                            $('.errorlokasi').html('');
+                        }
+
+                        if (data.error.lokasi_kantor) {
+                            $('#lokasi_kantor').addClass('is-invalid');
+                            $('.errorlokasi_kantor').html(data.error.lokasi_kantor);
+                        } else {
+                            $('#lokasi_kantor').removeClass('is-invalid');
+                            $('.errorlokasi_kantor').html('');
+                        }
+
+                        if (data.error.remark) {
+                            $('#remark').addClass('is-invalid');
+                            $('.errorremark').html(data.error.remark);
+                        } else {
+                            $('#remark').removeClass('is-invalid');
+                            $('.errorremark').html('');
                         }
 
                     } else {
@@ -408,11 +508,11 @@
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown, data) {
-                    alert(data);
+                    // alert(data);
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Ada sesuatu yang error nih!, Coba deh kamu tanyakan ke bagian IT! Kesalahan:'
+                        text: 'Ada sesuatu yang error nih!, Coba deh kamu tanyakan ke bagian IT! Kesalahan : ' + data
                     })
                 }
             });
@@ -493,7 +593,7 @@
         });
 
         function updatee() {
-            $("#nomor_inventaris_pkm").val($('#nomor').val() + " " + $('#tahun').val());
+            $("#nomor_inventaris_pkm").val("BC-" + $('#tahun').val() + "-PKM-" + $('#nomor').val());
         }
     </script>
 

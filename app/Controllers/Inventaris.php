@@ -49,69 +49,142 @@ class Inventaris extends BaseController
 
     public function bcpkm_add()
     {
-        // ===== Validasi ======= 
-        // if ($this->request->isAJAX()) {
+        if ($this->request->isAJAX()) {
 
-        $validation = \Config\Services::validation();
-        $valid = $this->validate(
-            [
-                'foto_barang' => [
-                    'rules' => 'uploaded[foto_barang]|max_size[foto_barang]|is_image[foto_barang]|mime_in[foto_barang,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                        'uploaded' => 'Foto tidak boleh kosong!',
-                        'max_size' => 'Ukuran gambar terlalu besar!',
-                        'is_image' => 'Yang anda pilih bukan file gambar!',
-                        'mime_in' => 'Yang anda pilih bukan file gambarrr!',
-                    ]
-                ],
-                'nomor_inventaris_pkm' => [
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => 'Nomor Inventaris harus diisi!',
-                    ]
-                ],
-            ]
-        );
-
-        if (!$valid) {
-            $msg = [
-                'error' => [
-                    'foto_barang' => $validation->getError('foto_barang'),
-                    'nomor_inventaris_pkm' => $validation->getError('nomor_inventaris_pkm'),
+            $validation = \Config\Services::validation();
+            $valid = $this->validate(
+                [
+                    'foto_barang' => 'uploaded[foto_barang]|max_size[foto_barang,2048]|is_image[foto_barang]|mime_in[foto_barang,image/jpg,image/jpeg,image/png]',
+                    // [
+                    //     'foto_barang' => [
+                    //         'uploaded' => 'Foto tidak boleh kosong!',
+                    //         'max_size' => 'Ukuran gambar terlalu besar!',
+                    //         'is_image' => 'Yang anda pilih bukan file gambar!',
+                    //         'mime_in' => 'Yang anda pilih bukan file gambarrr!',
+                    //     ]
+                    // ],
+                    // 'foto_barang' => [
+                    //     'rules' => 'uploaded[foto_barang]|max_size[foto_barang]|is_image[foto_barang]|mime_in[foto_barang,image/jpg,image/jpeg,image/png]',
+                    //     'errors' => [
+                    //         'uploaded' => 'Foto tidak boleh kosong!',
+                    //         'max_size' => 'Ukuran gambar terlalu besar!',
+                    //         'is_image' => 'Yang anda pilih bukan file gambar!',
+                    //         'mime_in' => 'Yang anda pilih bukan file gambarrr!',
+                    //     ]
+                    // ],
+                    'nomor' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Nomor harus diisi!',
+                        ]
+                    ],
+                    'tahun' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Tahun harus diisi!',
+                        ]
+                    ],
+                    'deskripsi' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Deskripsi harus diisi!',
+                        ]
+                    ],
+                    'kategori' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Kategori harus diisi!',
+                        ]
+                    ],
+                    'jumlah_unit' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Jumlah Unit harus diisi!',
+                        ]
+                    ],
+                    'lokasi' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Lokasi harus diisi!',
+                        ]
+                    ],
+                    'lokasi_kantor' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Lokasi Kantor harus diisi!',
+                        ]
+                    ],
+                    'remark' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Remark harus diisi!',
+                        ]
+                    ],
                 ]
-            ];
-            echo json_encode($msg);
+            );
+
+            if (!$valid) {
+                $msg = [
+                    'error' => [
+                        'foto_barang' => $validation->getError('foto_barang'),
+                        'nomor' => $validation->getError('nomor'),
+                        'tahun' => $validation->getError('tahun'),
+                        'deskripsi' => $validation->getError('deskripsi'),
+                        'kategori' => $validation->getError('kategori'),
+                        'jumlah_unit' => $validation->getError('jumlah_unit'),
+                        'lokasi' => $validation->getError('lokasi'),
+                        'lokasi_kantor' => $validation->getError('lokasi_kantor'),
+                        'remark' => $validation->getError('remark'),
+                    ]
+                ];
+                echo json_encode($msg);
+            } else {
+                $file_foto_barang = $this->request->getFile('foto_barang');
+                $nmr_inv = $this->request->getPost('nomor_inventaris_pkm');
+                $ext = $file_foto_barang->getClientExtension();
+                $nama_foto_barang = "$nmr_inv.$ext";
+                if ($file_foto_barang->move('img/inventaris/bc/pkm/', $nama_foto_barang)) {
+                    // thumnail images path
+                    $thumbnail_path = "img/inventaris/bc/pkm";
+
+                    // resizing image
+                    \Config\Services::image()->withFile('img/inventaris/bc/pkm/' . $nama_foto_barang)
+                        ->resize(800, 600, true, 'height')
+                        ->save($thumbnail_path . '/' . $nama_foto_barang);
+
+
+                    // if ($file_foto_barang == null) {
+                    //     $nama_foto_barang = 'default.jpg';
+                    // } else {
+                    //     $image = \Config\Services::image()->withFile($file_foto_barang)->resize(200, 100, true, 'height')->save(FCPATH . 'img/inventaris/bc/pkm/' .  $nama_foto_barang);
+                    //     // $file_foto_barang->move('img/inventaris/bc/pkm/');
+                    //     $file_foto_barang->move(WRITEPATH . 'uploads');
+                    // }
+                    $data = [
+                        'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
+                        'nomor' => $this->request->getPost('nomor'),
+                        'tahun' => $this->request->getPost('tahun'),
+                        'deskripsi' => $this->request->getPost('deskripsi'),
+                        'kategori' => $this->request->getPost('kategori'),
+                        'jumlah_unit' => $this->request->getPost('jumlah_unit'),
+                        'lokasi' => $this->request->getPost('lokasi'),
+                        'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
+                        'image' => $nama_foto_barang,
+                        'remark' => $this->request->getPost('remark'),
+                        'update_by' => user()->fullname,
+                        'last_update' => date('Y-m-d H:i:s'),
+                    ];
+                    $this->bcpkmmodel->insert($data);
+                    $stat = [
+                        'status' => "TRUE",
+                    ];
+                    echo json_encode($stat);
+                    // echo json_encode(array("status" => TRUE));
+                }
+            }
         } else {
-            $file_foto_barang = $this->request->getFile('foto_barang');
-            $file_foto_barang->move('/img/inventaris/bc/pkm');
-            $nama_foto_barang = $file_foto_barang->getName();
-            $data = [
-                'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
-                'nomor' => $this->request->getPost('nomor'),
-                'tahun' => $this->request->getPost('tahun'),
-                'deskripsi' => $this->request->getPost('deskripsi'),
-                'kategori' => $this->request->getPost('kategori'),
-                'jumlah_unit' => $this->request->getPost('jumlah_unit'),
-                'lokasi' => $this->request->getPost('lokasi'),
-                'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
-                'image' => 2,
-                'remark' => $this->request->getPost('remark'),
-                'update_by' => user()->fullname,
-                'last_update' => date('Y-m-d H:i:s'),
-            ];
-            $this->bcpkmmodel->insert($data);
-            $stat = [
-                'status' => "TRUE",
-            ];
-            echo json_encode($stat);
-            // echo json_encode(array("status" => TRUE));
+            exit('Maaf tidak dapat diproses');
         }
-        // } else {
-        //     exit('Maaf tidak dapat diproses');
-        // }
-
-        // =======================
-
     }
 
     public function bcpkm_update()
