@@ -54,24 +54,14 @@ class Inventaris extends BaseController
             $validation = \Config\Services::validation();
             $valid = $this->validate(
                 [
-                    'foto_barang' => 'uploaded[foto_barang]|max_size[foto_barang,2048]|is_image[foto_barang]|mime_in[foto_barang,image/jpg,image/jpeg,image/png]',
-                    // [
-                    //     'foto_barang' => [
-                    //         'uploaded' => 'Foto tidak boleh kosong!',
-                    //         'max_size' => 'Ukuran gambar terlalu besar!',
-                    //         'is_image' => 'Yang anda pilih bukan file gambar!',
-                    //         'mime_in' => 'Yang anda pilih bukan file gambarrr!',
-                    //     ]
-                    // ],
-                    // 'foto_barang' => [
-                    //     'rules' => 'uploaded[foto_barang]|max_size[foto_barang]|is_image[foto_barang]|mime_in[foto_barang,image/jpg,image/jpeg,image/png]',
-                    //     'errors' => [
-                    //         'uploaded' => 'Foto tidak boleh kosong!',
-                    //         'max_size' => 'Ukuran gambar terlalu besar!',
-                    //         'is_image' => 'Yang anda pilih bukan file gambar!',
-                    //         'mime_in' => 'Yang anda pilih bukan file gambarrr!',
-                    //     ]
-                    // ],
+                    'nomor_inventaris_pkm' => [
+                        'rules' => 'required|is_unique[inventaris_bc_pkm.nomor_inventaris_pkm]',
+                        'errors' => [
+                            'required' => 'Tahun dan Nomor harus diisi dahulu!',
+                            'is_unique' => 'Nomor Inventaris sudah ada di database!',
+                        ]
+                    ],
+                    'inp_foto_barang' => 'uploaded[inp_foto_barang]|max_size[inp_foto_barang,2048]|is_image[inp_foto_barang]|mime_in[inp_foto_barang,image/jpg,image/jpeg,image/png]',
                     'nomor' => [
                         'rules' => 'required',
                         'errors' => [
@@ -126,7 +116,8 @@ class Inventaris extends BaseController
             if (!$valid) {
                 $msg = [
                     'error' => [
-                        'foto_barang' => $validation->getError('foto_barang'),
+                        'nomor_inventaris_pkm' => $validation->getError('nomor_inventaris_pkm'),
+                        'inp_foto_barang' => $validation->getError('inp_foto_barang'),
                         'nomor' => $validation->getError('nomor'),
                         'tahun' => $validation->getError('tahun'),
                         'deskripsi' => $validation->getError('deskripsi'),
@@ -139,27 +130,17 @@ class Inventaris extends BaseController
                 ];
                 echo json_encode($msg);
             } else {
-                $file_foto_barang = $this->request->getFile('foto_barang');
+                $file_foto_barang = $this->request->getFile('inp_foto_barang');
                 $nmr_inv = $this->request->getPost('nomor_inventaris_pkm');
                 $ext = $file_foto_barang->getClientExtension();
                 $nama_foto_barang = "$nmr_inv.$ext";
                 if ($file_foto_barang->move('img/inventaris/bc/pkm/', $nama_foto_barang)) {
-                    // thumnail images path
                     $thumbnail_path = "img/inventaris/bc/pkm";
-
                     // resizing image
                     \Config\Services::image()->withFile('img/inventaris/bc/pkm/' . $nama_foto_barang)
                         ->resize(800, 600, true, 'height')
                         ->save($thumbnail_path . '/' . $nama_foto_barang);
 
-
-                    // if ($file_foto_barang == null) {
-                    //     $nama_foto_barang = 'default.jpg';
-                    // } else {
-                    //     $image = \Config\Services::image()->withFile($file_foto_barang)->resize(200, 100, true, 'height')->save(FCPATH . 'img/inventaris/bc/pkm/' .  $nama_foto_barang);
-                    //     // $file_foto_barang->move('img/inventaris/bc/pkm/');
-                    //     $file_foto_barang->move(WRITEPATH . 'uploads');
-                    // }
                     $data = [
                         'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
                         'nomor' => $this->request->getPost('nomor'),
@@ -179,7 +160,6 @@ class Inventaris extends BaseController
                         'status' => "TRUE",
                     ];
                     echo json_encode($stat);
-                    // echo json_encode(array("status" => TRUE));
                 }
             }
         } else {

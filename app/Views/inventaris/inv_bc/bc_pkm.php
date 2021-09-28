@@ -75,15 +75,15 @@
                 <div class="modal-body">
                     <form action="#" id="form_edit_bcpkm" name="form_edit_bcpkm" method="POST" enctype="multipart/form-data">
                         <div class="row my-2 mx-2">
-
+                            <input type="hidden" name="nama_foto_barang_lama">
                             <div class="col-bg-6 text-center mb-3">
                                 <div class="form-group">
-                                    <img id="image" name="image" class="card-img-top mb-2" alt="Foto Barang" style="width: 15rem">
+                                    <img id="view_foto_barang" name="view_foto_barang" class="img-thumbnail img-preview card-img-top mb-2" alt="Foto Barang" style="width: 15rem">
                                     <br>
                                     <div class="row justify-content-center">
                                         <div class="col-6 justify-content-center">
-                                            <input type="file" id="foto_barang" name="foto_barang" class="form-control form-control-sm" />
-                                            <div class="invalid-feedback error_foto_barang">
+                                            <input type="file" id="inp_foto_barang" name="inp_foto_barang" class="form-control form-control-sm" onchange="previewimg()" />
+                                            <div class="invalid-feedback error_inp_foto_barang">
 
                                             </div>
                                             <input type="text" class="form-control visually-hidden" id="imageee" name="imageee" autocomplete="off">
@@ -96,7 +96,7 @@
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="nomor_inventaris_pkm" name="nomor_inventaris_pkm" autocomplete="off" disabled>
-                                        <div class="invalid-feedback errornomor_inventaris_pkm">
+                                        <div class="invalid-feedback error_nomor_inventaris_pkm">
 
                                         </div>
                                         <label for="floatingSelect">Nomor Inventaris</label>
@@ -198,7 +198,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button title='Simpan' onclick="simpan_pkm()" type="button" class="btn btn-primary">Simpan</button>
-                    <button type="button" id="btntes" class="btn btn-secondary">TES</button>
                 </div>
             </div>
         </div>
@@ -307,6 +306,7 @@
     <!-- extension responsive -->
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
+    <!-- Tabel Responsive -->
     <script>
         $(document).ready(function() {
             $('#tabel_bcpkm').DataTable({
@@ -315,26 +315,20 @@
         });
     </script>
 
+    <!-- Preview Img on change file -->
     <script>
-        const inpfile = document.getElementById("foto_barang");
-        const btntes = document.getElementById("btntes");
-
-        btntes.addEventListener('click', function(event) {
-            // const xhr = new XMLHttpRequest();
-            // const formdata = new FormData();
-            // console.log(inpfile.files);
-
-            // formdata.append("foto_barang", inpfile.files);
-
-            // xhr.open("post", '/inventaris/bcpkm_add/');
-            // xhr.send(formdata);
-            var formDataPKM = new FormData();
-            // Attach file
-            formDataPKM.append('foto_barang', $('#foto_barang')[0].files[0]);
-            console.log(inpfile.files);
-        });
+        function previewimg() {
+            const inp_foto_barang = document.querySelector('#inp_foto_barang');
+            const imgview = document.querySelector('.img-preview');
+            const filefoto = new FileReader();
+            filefoto.readAsDataURL(inp_foto_barang.files[0]);
+            filefoto.onload = function(e) {
+                imgview.src = e.target.result;
+            }
+        }
     </script>
 
+    <!-- Script Modal BC PKM -->
     <script type="text/javascript">
         $(document).ready(function() {
             $('#tabel_bcpkm').DataTable();
@@ -344,6 +338,10 @@
 
         function add_bcpkm() {
             save_method = 'add';
+
+            var formx = $('#form_edit_bcpkm');
+            formx.find('.img-preview').remove();
+
             $('#form_edit_bcpkm')[0].reset(); // reset form on modals
             $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal
             $('.modal-title').text('Add Detail Inventaris');
@@ -351,6 +349,12 @@
 
         function edit_bcpkm(nomor_inventaris_pkm) {
             save_method = 'update';
+
+            // Reset Form Validasi
+            var formx = $('#form_edit_bcpkm');
+            formx.find('.form-control').removeClass('is-invalid');
+            formx.find('.form-control').html('');
+
             $('#form_edit_bcpkm')[0].reset(); // reset form on modals
             <?php header('Content-type: application/json'); ?>
             //Ajax Load data from ajax
@@ -369,7 +373,8 @@
                     $('[name="lokasi"]').val(data[0].lokasi);
                     $('[name="lokasi_kantor"]').val(data[0].lokasi_kantor);
                     $('[name="imagee"]').val(data[0].image);
-                    $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
+                    $('[name="nama_foto_barang_lama"]').text(data[0].image);
+                    $('[name="view_foto_barang"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
                     $('[name="remark"]').val(data[0].remark);
 
                     $('.modal-title').text('Edit Detail Inventaris');
@@ -398,7 +403,7 @@
 
             var formDataPKM = new FormData();
             // Attach file
-            formDataPKM.append('foto_barang', $('#foto_barang')[0].files[0]);
+            formDataPKM.append('inp_foto_barang', $('#inp_foto_barang')[0].files[0]);
             formDataPKM.append('nomor_inventaris_pkm', $('#nomor_inventaris_pkm').val());
             formDataPKM.append('nomor', $('#nomor').val());
             formDataPKM.append('tahun', $('#tahun').val());
@@ -419,12 +424,20 @@
                 success: function(data) {
                     //if success close modal and reload ajax table
                     if (data.error) {
-                        if (data.error.foto_barang) {
-                            $('#foto_barang').addClass('is-invalid');
-                            $('.error_foto_barang').html(data.error.foto_barang);
+                        if (data.error.nomor_inventaris_pkm) {
+                            $('#nomor_inventaris_pkm').addClass('is-invalid');
+                            $('.error_nomor_inventaris_pkm').html(data.error.nomor_inventaris_pkm);
                         } else {
-                            $('#foto_barang').removeClass('is-invalid');
-                            $('.error_foto_barang').html('');
+                            $('#nomor_inventaris_pkm').removeClass('is-invalid');
+                            $('.error_nomor_inventaris_pkm').html('');
+                        }
+
+                        if (data.error.inp_foto_barang) {
+                            $('#inp_foto_barang').addClass('is-invalid');
+                            $('.error_inp_foto_barang').html(data.error.inp_foto_barang);
+                        } else {
+                            $('#inp_foto_barang').removeClass('is-invalid');
+                            $('.error_inp_foto_barang').html('');
                         }
 
                         if (data.error.nomor) {
