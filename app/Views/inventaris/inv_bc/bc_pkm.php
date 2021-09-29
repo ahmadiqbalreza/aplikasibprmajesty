@@ -106,7 +106,9 @@
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="tahun" name="tahun" autocomplete="off">
+                                        <select class="form-select form-control" id="tahun" name="tahun" aria-label="Tahun">
+
+                                        </select>
                                         <div class="invalid-feedback errortahun">
 
                                         </div>
@@ -122,6 +124,13 @@
 
                                         </div>
                                         <label for="floatingSelect">Nomor</label>
+                                        <button type="button" onclick="cek_nomor()" class="btn btn-outline-primary btn-sm" id="cek_nomor_terakhir">Cek Nomor Terakhir</button>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="cek_nomor_terakhir">
+                                            <label class="form-check-label" for="cek_nomor_terakhir">
+                                                <small>Cek Nomor Terakhir</small>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -339,13 +348,18 @@
         function add_bcpkm() {
             save_method = 'add';
 
-            // var formx = $('#form_edit_bcpkm');
-            // formx.find('.img-preview').remove();
-            $('[name="view_foto_barang"]').removeAttr('src');
-
             $('#form_edit_bcpkm')[0].reset(); // reset form on modals
             $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal
             $('.modal-title').text('Add Detail Inventaris');
+
+            $('[name="view_foto_barang"]').removeAttr('src');
+            $('[name="tahun"]').find('option').remove();
+
+            $('[name="tahun"]').append("<option selected value=''>" + "Pilih Tahun" + "</option>");
+            for (var i = 2009; i <= 2030; i++) {
+                $('[name="tahun"]').append("<option value='" + i + "'>" + i + "</option>");
+            }
+
         }
 
         function edit_bcpkm(nomor_inventaris_pkm) {
@@ -367,7 +381,13 @@
                     console.log(data[0]);
                     $('[name="nomor_inventaris_pkm"]').val(data[0].nomor_inventaris_pkm);
                     $('[name="nomor"]').val(data[0].nomor);
-                    $('[name="tahun"]').val(data[0].tahun);
+
+                    // Select untuk Tahun
+                    $('[name="tahun"]').append("<option value='" + data[0].tahun + "'>" + data[0].tahun + "</option>");
+                    for (var i = 2009; i <= 2030; i++) {
+                        $('[name="tahun"]').append("<option value='" + i + "'>" + i + "</option>");
+                    }
+
                     $('[name="deskripsi"]').val(data[0].deskripsi);
                     $('[name="kategori"]').val(data[0].kategori);
                     $('[name="jumlah_unit"]').val(data[0].jumlah_unit);
@@ -428,6 +448,11 @@
                         if (data.error.nomor_inventaris_pkm) {
                             $('#nomor_inventaris_pkm').addClass('is-invalid');
                             $('.error_nomor_inventaris_pkm').html(data.error.nomor_inventaris_pkm);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.error.nomor_inventaris_pkm
+                            })
                         } else {
                             $('#nomor_inventaris_pkm').removeClass('is-invalid');
                             $('.error_nomor_inventaris_pkm').html('');
@@ -504,7 +529,11 @@
                             $('#remark').removeClass('is-invalid');
                             $('.errorremark').html('');
                         }
-
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ada Field yang belum diisi atau data tidak sesuai nih! Cek Ulang yaa!'
+                        })
                     } else {
                         $('#modal_edit_bcpkm').modal('hide');
                         // console.log(data[0].error);
@@ -602,9 +631,26 @@
             });
         }
 
-        $("#nomor, #tahun").keyup(function() {
+        $("#tahun").change(function() {
             updatee();
         });
+
+        $("#nomor").keyup(function() {
+            updatee();
+        });
+
+        $("#cek_nomor_terakhir").change(function() {
+            update_nomor();
+        });
+
+        function cek_nomor() {
+            update_nomor();
+        }
+
+        function update_nomor() {
+            $("#nomor").val("77");
+            updatee();
+        }
 
         function updatee() {
             $("#nomor_inventaris_pkm").val("BC-" + $('#tahun').val() + "-PKM-" + $('#nomor').val());

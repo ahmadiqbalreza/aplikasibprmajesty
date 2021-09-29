@@ -200,11 +200,8 @@ class Inventaris extends BaseController
         $imgname = $this->bcpkmmodel->getImagename($nomor_inventaris_pkm);
         foreach ($imgname as $imgname1) {
             $file_name = $imgname1['image'];
-            // $file_name = "'img/inventaris/bc/pkm/' . $imgname";
             if (file_exists('img/inventaris/bc/pkm/' . $file_name)) {
-
                 unlink('img/inventaris/bc/pkm/' . $file_name);
-
                 // Proses delete data 
                 $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->delete();
                 echo json_encode(array("status" => TRUE));
