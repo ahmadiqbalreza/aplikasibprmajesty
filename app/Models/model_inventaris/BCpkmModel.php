@@ -26,4 +26,9 @@ class BCpkmModel extends Model
         $query = $this->get();
         return $query->getResult();
     }
+
+    public function getImagename($nomor_inventaris)
+    {
+        return $this->where('nomor_inventaris_pkm', $nomor_inventaris)->findAll();
+    }
 }

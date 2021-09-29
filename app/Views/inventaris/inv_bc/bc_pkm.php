@@ -339,8 +339,9 @@
         function add_bcpkm() {
             save_method = 'add';
 
-            var formx = $('#form_edit_bcpkm');
-            formx.find('.img-preview').remove();
+            // var formx = $('#form_edit_bcpkm');
+            // formx.find('.img-preview').remove();
+            $('[name="view_foto_barang"]').removeAttr('src');
 
             $('#form_edit_bcpkm')[0].reset(); // reset form on modals
             $('#modal_edit_bcpkm').modal('show'); // show bootstrap modal

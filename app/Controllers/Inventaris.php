@@ -139,6 +139,13 @@ class Inventaris extends BaseController
                     // resizing image
                     \Config\Services::image()->withFile('img/inventaris/bc/pkm/' . $nama_foto_barang)
                         ->resize(800, 600, true, 'height')
+                        ->text(date('dmy H:i:s'), [
+                            'color'      => '#000000',
+                            'opacity'    => 0,
+                            'hAlign'     => 'center',
+                            'vAlign'     => 'bottom',
+                            'fontSize'   => 35
+                        ])
                         ->save($thumbnail_path . '/' . $nama_foto_barang);
 
                     $data = [
@@ -189,8 +196,24 @@ class Inventaris extends BaseController
 
     public function bcpkm_delete($nomor_inventaris_pkm)
     {
-        $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->delete();
-        echo json_encode(array("status" => TRUE));
+        // Proses Menghapus File Image
+        $imgname = $this->bcpkmmodel->getImagename($nomor_inventaris_pkm);
+        foreach ($imgname as $imgname1) {
+            $file_name = $imgname1['image'];
+            // $file_name = "'img/inventaris/bc/pkm/' . $imgname";
+            if (file_exists('img/inventaris/bc/pkm/' . $file_name)) {
+
+                unlink('img/inventaris/bc/pkm/' . $file_name);
+
+                // Proses delete data 
+                $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->delete();
+                echo json_encode(array("status" => TRUE));
+            } else {
+                // Proses delete data 
+                $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->delete();
+                echo json_encode(array("status" => TRUE));
+            }
+        }
     }
 
     public function bc_prk()
