@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2021 at 11:20 AM
+-- Generation Time: Sep 30, 2021 at 11:29 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -244,7 +244,27 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (116, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-21 07:59:17', 1),
 (117, '::1', 'selly@gmail.com', 45, '2021-09-21 08:34:50', 1),
 (118, '::1', 'admin', NULL, '2021-09-21 08:40:49', 0),
-(119, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-21 08:40:54', 1);
+(119, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-21 08:40:54', 1),
+(120, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-22 07:53:59', 1),
+(121, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-23 08:09:59', 1),
+(122, '::1', 'admin', NULL, '2021-09-24 07:51:58', 0),
+(123, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-24 07:52:05', 1),
+(124, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-24 08:07:10', 1),
+(125, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-24 11:27:25', 1),
+(126, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-25 06:27:15', 1),
+(127, '192.168.1.24', 'admin', NULL, '2021-09-25 10:33:16', 0),
+(128, '192.168.1.24', 'ahmadiqbal@gmail.com', 2, '2021-09-25 10:33:34', 1),
+(129, '192.168.1.24', 'ahmadiqbal@gmail.com', 2, '2021-09-25 10:40:57', 1),
+(130, '192.168.1.14', 'ahmadiqbal@gmail.com', 2, '2021-09-25 10:49:08', 1),
+(131, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-27 09:08:44', 1),
+(132, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-28 13:45:16', 1),
+(133, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-29 08:44:02', 1),
+(134, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-30 08:11:09', 1),
+(135, '::1', 'admin', NULL, '2021-09-30 13:55:31', 0),
+(136, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-30 13:55:38', 1),
+(137, '::1', 'ahmadiqbalreza@gmail.com', NULL, '2021-09-30 14:12:40', 0),
+(138, '::1', 'ahmadiqbalreza@gmail.com', NULL, '2021-09-30 14:12:52', 0),
+(139, '::1', 'ahmadiqbal@gmail.com', 2, '2021-09-30 14:12:57', 1);
 
 -- --------------------------------------------------------
 
@@ -374,10 +394,11 @@ CREATE TABLE `inventaris_bc_pkm` (
 --
 
 INSERT INTO `inventaris_bc_pkm` (`nomor_inventaris_pkm`, `nomor`, `tahun`, `deskripsi`, `kategori`, `jumlah_unit`, `lokasi`, `lokasi_kantor`, `image`, `remark`, `update_by`, `last_update`) VALUES
-('BC-2009-PKM-8', 9, 2009, 'CPU Intel Core 2 Duo', 'PKM', 1, 'Audit', 'Batam Center', '', 'OK', 'Ahmad Iqbal', '2021-09-21 14:55:02'),
-('BC-2012-PKM-1', 1, 2012, 'Monitor Acer 19 Inchi', 'PKM', 1, 'EDP IT', 'Batam Center', '1.jpeg', 'Bagus', 'Ahmad Iqbal', '2021-09-21 15:45:06'),
-('BC-2012-PKM-28', 28, 2012, 'Keyboard', 'PKM', 1, 'Appraisal', 'Batam Center', '', 'Rusak', 'Ahmad Iqbal', '2021-09-21 16:17:54'),
-('BC-2017-PKM-4', 4, 2017, 'Telpon Kantor', 'PKM', 1, 'Kepatuhan', 'Batam Center', '', 'OK', 'Ahmad Iqbal', '2021-09-21 16:18:03');
+('BC-2015-PKM-2', 2, 2015, 'Komputer', 'PKM', 7, 'Accounting', 'Kantor', 'BC-2015-PKM-2.png', 'OK', 'Ahmad Iqbal', '2021-09-30 14:00:27'),
+('BC-2018-PKM-1', 1, 2018, 'Mouse', 'PKM', 1, 'EDP', 'Kantor', 'BC-2018-PKM-1.PNG', 'OK', 'Ahmad Iqbal', '2021-09-30 15:52:11'),
+('BC-2021-PKM-3', 3, 2021, 'Monitor', 'PKM', 1, 'Accounting', 'Kantor', 'BC-2021-PKM-3.png', 'OK', 'Ahmad Iqbal', '2021-09-30 15:45:10'),
+('BC-2021-PKM-4', 4, 2021, 'Printer', 'PKM', 1, 'Kepatuhan', 'Kantor', 'BC-2021-PKM-4.PNG', 'OK', 'Ahmad Iqbal', '2021-09-30 15:50:47'),
+('BC-2021-PKM-5', 5, 2021, 'aaaa', 'PKM', 2, 'aaaa', 'Kantor Batam Center', 'BC-2021-PKM-5.PNG', 'Repaired', 'Ahmad Iqbal', '2021-09-30 16:19:09');
 
 -- --------------------------------------------------------
 
@@ -621,7 +642,8 @@ INSERT INTO `tabel_nomor_surat` (`id`, `count`, `nomor_surat`, `tahun`, `perihal
 (149, 17, '017/EXT/MGR/0921', '21', 'dsaa', 'dsa', '1005133', 'Ahmad Iqbal', 'IT', '14 September 2021', 1),
 (150, 18, '018/EXT/MGR/0921', '21', 'dadw', 'das', '1010', 'Testing', 'Audit Internal', '14 September 2021', 1),
 (151, 19, '019/EXT/MGR/0921', '21', 'dasx', 'ca', '1005133', 'Ahmad Iqbal', 'IT', '14 September 2021', 1),
-(152, 20, '020/EXT/MGR/0921', '21', 'fdsf', 'fsd', '1005133', 'Ahmad Iqbal', 'IT', '20 September 2021', 1);
+(152, 20, '020/EXT/MGR/0921', '21', 'fdsf', 'fsd', '1005133', 'Ahmad Iqbal', 'IT', '20 September 2021', 1),
+(153, 21, '021/EXT/MGR/0921', '21', 'homio', 'OJK', '1005133', 'Ahmad Iqbal', 'IT', '24 September 2021', 1);
 
 -- --------------------------------------------------------
 
@@ -882,7 +904,7 @@ ALTER TABLE `auth_groups`
 -- AUTO_INCREMENT for table `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `auth_permissions`
@@ -918,7 +940,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `tabel_nomor_surat`
 --
 ALTER TABLE `tabel_nomor_surat`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
 
 --
 -- AUTO_INCREMENT for table `table_department`
