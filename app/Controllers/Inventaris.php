@@ -47,6 +47,12 @@ class Inventaris extends BaseController
         echo json_encode($data);
     }
 
+    public function ajax_get_nomor_terakhir()
+    {
+        $data = $this->bcpkmmodel->getNomorterakhir();
+        echo json_encode($data);
+    }
+
     public function bcpkm_add()
     {
         if ($this->request->isAJAX()) {
@@ -201,6 +207,7 @@ class Inventaris extends BaseController
         foreach ($imgname as $imgname1) {
             $file_name = $imgname1['image'];
             if (file_exists('img/inventaris/bc/pkm/' . $file_name)) {
+                // Proses Delete gambar
                 unlink('img/inventaris/bc/pkm/' . $file_name);
                 // Proses delete data 
                 $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->delete();

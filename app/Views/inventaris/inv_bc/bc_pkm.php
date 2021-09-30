@@ -36,6 +36,8 @@
                                 <th>Jumlah</th>
                                 <th>Lokasi</th>
                                 <th>Remark</th>
+                                <th>Diupdate oleh</th>
+                                <th>Terakhir diupdate</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -49,6 +51,8 @@
                                     <td><?= $pkm->jumlah_unit; ?></td>
                                     <td><?= $pkm->lokasi; ?></td>
                                     <td><?= $pkm->remark; ?></td>
+                                    <td><?= $pkm->update_by; ?></td>
+                                    <td><?= date('d-m-Y H:i:s', strtotime($pkm->last_update)); ?></td>
                                     <td>
                                         <a title='Detail' onclick="view_bcpkm('<?= $pkm->nomor_inventaris_pkm; ?>')" type="button" class="btn btn-info btn-sm">Detail</a>&nbsp;&nbsp;
                                         <a title='Edit' onclick="edit_bcpkm('<?= $pkm->nomor_inventaris_pkm; ?>')" type="button" class="btn btn-warning btn-sm">Edit</a>&nbsp;&nbsp;
@@ -113,6 +117,7 @@
 
                                         </div>
                                         <label for="floatingSelect">Tahun</label>
+                                        <button type="button" onclick="cek_tahun()" class="btn btn-primary btn-sm mt-1" id="cek_tahunn">Gunakan tahun sekarang</button>
                                     </div>
                                 </div>
                             </div>
@@ -124,16 +129,11 @@
 
                                         </div>
                                         <label for="floatingSelect">Nomor</label>
-                                        <button type="button" onclick="cek_nomor()" class="btn btn-outline-primary btn-sm" id="cek_nomor_terakhir">Cek Nomor Terakhir</button>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="cek_nomor_terakhir">
-                                            <label class="form-check-label" for="cek_nomor_terakhir">
-                                                <small>Cek Nomor Terakhir</small>
-                                            </label>
-                                        </div>
+                                        <button type="button" onclick="cek_nomor()" class="btn btn-primary btn-sm mt-1" id="cek_nomor_terakhir">Gunakan nomor urut dari database</button>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
@@ -148,7 +148,7 @@
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="kategori" name="kategori" autocomplete="off">
+                                        <input type="text" class="form-control" id="kategori" name="kategori" autocomplete="off" value="PKM" readonly>
                                         <div class="invalid-feedback errorkategori">
 
                                         </div>
@@ -181,22 +181,26 @@
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="lokasi_kantor" name="lokasi_kantor" autocomplete="off">
+                                        <select class="form-select form-control" id="lokasi_kantor" name="lokasi_kantor" aria-label="lokasi_kantor">
+
+                                        </select>
                                         <div class="invalid-feedback errorlokasi_kantor">
 
                                         </div>
-                                        <label for="floatingSelect">Lokasi Kantor</label>
+                                        <label for="lokasi_kantor">Lokasi Kantor</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-bg-6">
                                 <div class="form-group">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="remark" name="remark" autocomplete="off">
+                                        <select class="form-select form-control" id="remark" name="remark" aria-label="remark">
+
+                                        </select>
                                         <div class="invalid-feedback errorremark">
 
                                         </div>
-                                        <label for="floatingSelect">Remark</label>
+                                        <label for="remark">Remark</label>
                                     </div>
                                 </div>
                             </div>
@@ -354,11 +358,23 @@
 
             $('[name="view_foto_barang"]').removeAttr('src');
             $('[name="tahun"]').find('option').remove();
+            $('[name="lokasi_kantor"]').find('option').remove();
+            $('[name="remark"]').find('option').remove();
 
             $('[name="tahun"]').append("<option selected value=''>" + "Pilih Tahun" + "</option>");
             for (var i = 2009; i <= 2030; i++) {
                 $('[name="tahun"]').append("<option value='" + i + "'>" + i + "</option>");
             }
+
+            // Select untuk Lokasi Kantor
+            $('[name="lokasi_kantor"]').append("<option value='Kantor Batam Center'>Kantor Batam Center</option>");
+            $('[name="lokasi_kantor"]').append("<option value='Kantor Penuin'>Kantor Penuin</option>");
+
+            // Select untuk Remark
+            $('[name="remark"]').append("<option value=''>Pilih Remark</option>");
+            $('[name="remark"]').append("<option value='Good'>Good</option>");
+            $('[name="remark"]').append("<option value='Bad'>Bad</option>");
+            $('[name="remark"]').append("<option value='Repaired'>Repaired</option>");
 
         }
 
@@ -392,7 +408,18 @@
                     $('[name="kategori"]').val(data[0].kategori);
                     $('[name="jumlah_unit"]').val(data[0].jumlah_unit);
                     $('[name="lokasi"]').val(data[0].lokasi);
-                    $('[name="lokasi_kantor"]').val(data[0].lokasi_kantor);
+
+                    // Select untuk Lokasi Kantor
+                    $('[name="lokasi_kantor"]').append("<option value='" + data[0].lokasi_kantor + "'>" + data[0].lokasi_kantor + "</option>");
+                    $('[name="lokasi_kantor"]').append("<option value='Kantor Batam Center'>Kantor Batam Center</option>");
+                    $('[name="lokasi_kantor"]').append("<option value='Kantor Penuin'>Kantor Penuin</option>");
+
+                    // Select untuk Remark
+                    $('[name="remark"]').append("<option value=''>Pilih Remark</option>");
+                    $('[name="remark"]').append("<option value='Good'>Good</option>");
+                    $('[name="remark"]').append("<option value='Bad'>Bad</option>");
+                    $('[name="remark"]').append("<option value='Repaired'>Repaired</option>");
+
                     $('[name="imagee"]').val(data[0].image);
                     $('[name="nama_foto_barang_lama"]').text(data[0].image);
                     $('[name="view_foto_barang"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
@@ -639,16 +666,25 @@
             updatee();
         });
 
-        $("#cek_nomor_terakhir").change(function() {
-            update_nomor();
-        });
-
         function cek_nomor() {
-            update_nomor();
+            $.ajax({
+                url: "<?php echo site_url('/inventaris/ajax_get_nomor_terakhir/') ?>",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data[0]);
+                    if (data[0] != null) {
+                        $("#nomor").val(parseInt(data[0].nomor) + 1);
+                    } else {
+                        $("#nomor").val("1");
+                    }
+                    updatee();
+                }
+            });
         }
 
-        function update_nomor() {
-            $("#nomor").val("77");
+        function cek_tahun() {
+            document.getElementById("tahun").value = new Date().getFullYear();
             updatee();
         }
 
