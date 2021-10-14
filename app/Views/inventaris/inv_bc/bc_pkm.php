@@ -79,7 +79,6 @@
                 <div class="modal-body">
                     <form action="#" id="form_edit_bcpkm" name="form_edit_bcpkm" method="POST" enctype="multipart/form-data">
                         <div class="row my-2 mx-2">
-                            <input type="hidden" name="nama_foto_barang_lama">
                             <div class="col-bg-6 text-center mb-3">
                                 <div class="form-group">
                                     <img id="view_foto_barang" name="view_foto_barang" class="img-thumbnail img-preview card-img-top mb-2" alt="Foto Barang" style="width: 15rem">
@@ -90,7 +89,6 @@
                                             <div class="invalid-feedback error_inp_foto_barang">
 
                                             </div>
-                                            <input type="text" class="form-control visually-hidden" id="imageee" name="imageee" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -372,9 +370,9 @@
 
             // Select untuk Remark
             $('[name="remark"]').append("<option value=''>Pilih Remark</option>");
-            $('[name="remark"]').append("<option value='Good'>Good</option>");
-            $('[name="remark"]').append("<option value='Bad'>Bad</option>");
-            $('[name="remark"]').append("<option value='Repaired'>Repaired</option>");
+            $('[name="remark"]').append("<option value='Bagus'>Bagus</option>");
+            $('[name="remark"]').append("<option value='Rusak'>Rusak</option>");
+            $('[name="remark"]').append("<option value='Perbaikan'>Perbaikan</option>");
 
         }
 
@@ -396,13 +394,16 @@
                 success: function(data) {
                     console.log(data[0]);
                     $('[name="nomor_inventaris_pkm"]').val(data[0].nomor_inventaris_pkm);
-                    $('[name="nomor"]').val(data[0].nomor);
+                    $('[name="nomor"]').val(data[0].nomor).attr("disabled", true);
 
                     // Select untuk Tahun
-                    $('[name="tahun"]').append("<option value='" + data[0].tahun + "'>" + data[0].tahun + "</option>");
-                    for (var i = 2009; i <= 2030; i++) {
-                        $('[name="tahun"]').append("<option value='" + i + "'>" + i + "</option>");
-                    }
+                    $('[name="tahun"]').append("<option value='" + data[0].tahun + "'>" + data[0].tahun + "</option>").attr("disabled", true);
+                    // for (var i = 2009; i <= 2030; i++) {
+                    //     $('[name="tahun"]').append("<option value='" + i + "'>" + i + "</option>");
+                    // }
+
+                    $('[id="cek_tahunn"]').remove();
+                    $('[id="cek_nomor_terakhir"]').remove();
 
                     $('[name="deskripsi"]').val(data[0].deskripsi);
                     $('[name="kategori"]').val(data[0].kategori);
@@ -416,12 +417,10 @@
 
                     // Select untuk Remark
                     $('[name="remark"]').append("<option value=''>Pilih Remark</option>");
-                    $('[name="remark"]').append("<option value='Good'>Good</option>");
-                    $('[name="remark"]').append("<option value='Bad'>Bad</option>");
-                    $('[name="remark"]').append("<option value='Repaired'>Repaired</option>");
+                    $('[name="remark"]').append("<option value='Bagus'>Bagus</option>");
+                    $('[name="remark"]').append("<option value='Rusak'>Rusak</option>");
+                    $('[name="remark"]').append("<option value='Perbaikan'>Perbaikan</option>");
 
-                    $('[name="imagee"]').val(data[0].image);
-                    $('[name="nama_foto_barang_lama"]').text(data[0].image);
                     $('[name="view_foto_barang"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
                     $('[name="remark"]').val(data[0].remark);
 

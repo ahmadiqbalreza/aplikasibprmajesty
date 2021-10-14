@@ -182,8 +182,48 @@ class Inventaris extends BaseController
 
     public function bcpkm_update()
     {
+        // Inisialisasi Variabel
+        $file_foto_barang = $this->request->getFile('inp_foto_barang');
+        $nomor_inventaris_pkm = $this->request->getPost('nomor_inventaris_pkm');
+        $imgname = $this->bcpkmmodel->getImagename($nomor_inventaris_pkm);
+
+        // Penghapusan File Foto Jika ada upload foto baru
+        if ($file_foto_barang != null) {
+            //delete gambar
+            foreach ($imgname as $imgname1) {
+                $file_name = $imgname1['image'];
+                if (file_exists('img/inventaris/bc/pkm/' . $file_name)) {
+                    unlink('img/inventaris/bc/pkm/' . $file_name);
+                }
+            }
+
+            // Upload Gambar Baru
+            $nmr_inv = $nomor_inventaris_pkm;
+            $ext = $file_foto_barang->getClientExtension();
+            $nama_foto_barang = "$nmr_inv.$ext";
+            $nama_foto = $nama_foto_barang;
+            $file_foto_barang->move('img/inventaris/bc/pkm/', $nama_foto_barang);
+            $thumbnail_path = "img/inventaris/bc/pkm";
+            // resizing image
+            \Config\Services::image()->withFile('img/inventaris/bc/pkm/' . $nama_foto_barang)
+                ->resize(800, 600, true, 'height')
+                ->text(date('dmy H:i:s'), [
+                    'color'      => '#000000',
+                    'opacity'    => 0,
+                    'hAlign'     => 'center',
+                    'vAlign'     => 'bottom',
+                    'fontSize'   => 35
+                ])
+                ->save($thumbnail_path . '/' . $nama_foto_barang);
+        } else {
+            // Hanya Update nama file gambar 
+            foreach ($imgname as $imgname1) {
+                $nama_foto = $imgname1['image'];
+            }
+        }
+
         $data = [
-            'nomor_inventaris_pkm' => $this->request->getPost('nomor_inventaris_pkm'),
+            'nomor_inventaris_pkm' => $nomor_inventaris_pkm,
             'nomor' => $this->request->getPost('nomor'),
             'tahun' => $this->request->getPost('tahun'),
             'deskripsi' => $this->request->getPost('deskripsi'),
@@ -191,12 +231,12 @@ class Inventaris extends BaseController
             'jumlah_unit' => $this->request->getPost('jumlah_unit'),
             'lokasi' => $this->request->getPost('lokasi'),
             'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
-            'image' => $this->request->getPost('imagee'),
+            'image' => $nama_foto,
             'remark' => $this->request->getPost('remark'),
             'update_by' => user()->fullname,
             'last_update' => date('Y-m-d H:i:s'),
         ];
-        $this->bcpkmmodel->where('nomor_inventaris_pkm', $this->request->getPost('nomor_inventaris_pkm'))->set($data)->update();
+        $this->bcpkmmodel->where('nomor_inventaris_pkm', $nomor_inventaris_pkm)->set($data)->update();
         echo json_encode(array("status" => TRUE));
     }
 
