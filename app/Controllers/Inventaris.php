@@ -3,14 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\model_inventaris\BCpkmModel;
+use App\Models\model_inventaris\BCprkModel;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 
 class Inventaris extends BaseController
 {
     protected $bcpkmmodel;
+    protected $bcprkmodel;
     public function __construct()
     {
         $this->bcpkmmodel = new BCpkmModel();
+        $this->bcprkmodel = new BCprkModel();
     }
 
     public function index()
@@ -263,10 +266,232 @@ class Inventaris extends BaseController
     public function bc_prk()
     {
         $data = [
-            'title' => 'PRK'
+            'title' => 'PRK',
+            'db_bcprk' => $this->bcprkmodel->getAllbcprk(),
+            'validation' => \Config\Services::validation()
         ];
         echo view('/inventaris/inv_bc/bc_prk', $data);
     }
+
+    public function ajax_get_bcprk($nomor_inventaris_prk)
+    {
+        $data = $this->bcprkmodel->getbyNomorinventarisbcprk($nomor_inventaris_prk);
+        echo json_encode($data);
+    }
+
+    public function ajax_get_nomor_terakhir_prk()
+    {
+        $data = $this->bcprkmodel->getNomorterakhir();
+        echo json_encode($data);
+    }
+
+    public function bcprk_add()
+    {
+        if ($this->request->isAJAX()) {
+
+            $validation = \Config\Services::validation();
+            $valid = $this->validate(
+                [
+                    'nomor_inventaris_prk' => [
+                        'rules' => 'required|is_unique[inventaris_bc_prk.nomor_inventaris_prk]',
+                        'errors' => [
+                            'required' => 'Tahun dan Nomor harus diisi dahulu!',
+                            'is_unique' => 'Nomor Inventaris sudah ada di database!',
+                        ]
+                    ],
+                    'inp_foto_barang' => 'uploaded[inp_foto_barang]|max_size[inp_foto_barang,2048]|is_image[inp_foto_barang]|mime_in[inp_foto_barang,image/jpg,image/jpeg,image/png]',
+                    'nomor' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Nomor harus diisi!',
+                        ]
+                    ],
+                    'tahun' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Tahun harus diisi!',
+                        ]
+                    ],
+                    'deskripsi' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Deskripsi harus diisi!',
+                        ]
+                    ],
+                    'kategori' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Kategori harus diisi!',
+                        ]
+                    ],
+                    'jumlah_unit' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Jumlah Unit harus diisi!',
+                        ]
+                    ],
+                    'lokasi' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Lokasi harus diisi!',
+                        ]
+                    ],
+                    'lokasi_kantor' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Lokasi Kantor harus diisi!',
+                        ]
+                    ],
+                    'remark' => [
+                        'rules' => 'required',
+                        'errors' => [
+                            'required' => 'Remark harus diisi!',
+                        ]
+                    ],
+                ]
+            );
+
+            if (!$valid) {
+                $msg = [
+                    'error' => [
+                        'nomor_inventaris_prk' => $validation->getError('nomor_inventaris_prk'),
+                        'inp_foto_barang' => $validation->getError('inp_foto_barang'),
+                        'nomor' => $validation->getError('nomor'),
+                        'tahun' => $validation->getError('tahun'),
+                        'deskripsi' => $validation->getError('deskripsi'),
+                        'kategori' => $validation->getError('kategori'),
+                        'jumlah_unit' => $validation->getError('jumlah_unit'),
+                        'lokasi' => $validation->getError('lokasi'),
+                        'lokasi_kantor' => $validation->getError('lokasi_kantor'),
+                        'remark' => $validation->getError('remark'),
+                    ]
+                ];
+                echo json_encode($msg);
+            } else {
+                $file_foto_barang = $this->request->getFile('inp_foto_barang');
+                $nmr_inv = $this->request->getPost('nomor_inventaris_prk');
+                $ext = $file_foto_barang->getClientExtension();
+                $nama_foto_barang = "$nmr_inv.$ext";
+                if ($file_foto_barang->move('img/inventaris/bc/prk/', $nama_foto_barang)) {
+                    $thumbnail_path = "img/inventaris/bc/prk";
+                    // resizing image
+                    \Config\Services::image()->withFile('img/inventaris/bc/prk/' . $nama_foto_barang)
+                        ->resize(800, 600, true, 'height')
+                        ->text(date('dmy H:i:s'), [
+                            'color'      => '#000000',
+                            'opacity'    => 0,
+                            'hAlign'     => 'center',
+                            'vAlign'     => 'bottom',
+                            'fontSize'   => 35
+                        ])
+                        ->save($thumbnail_path . '/' . $nama_foto_barang);
+
+                    $data = [
+                        'nomor_inventaris_prk' => $this->request->getPost('nomor_inventaris_prk'),
+                        'nomor' => $this->request->getPost('nomor'),
+                        'tahun' => $this->request->getPost('tahun'),
+                        'deskripsi' => $this->request->getPost('deskripsi'),
+                        'kategori' => $this->request->getPost('kategori'),
+                        'jumlah_unit' => $this->request->getPost('jumlah_unit'),
+                        'lokasi' => $this->request->getPost('lokasi'),
+                        'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
+                        'image' => $nama_foto_barang,
+                        'remark' => $this->request->getPost('remark'),
+                        'update_by' => user()->fullname,
+                        'last_update' => date('Y-m-d H:i:s'),
+                    ];
+                    $this->bcprkmodel->insert($data);
+                    $stat = [
+                        'status' => "TRUE",
+                    ];
+                    echo json_encode($stat);
+                }
+            }
+        } else {
+            exit('Maaf tidak dapat diproses');
+        }
+    }
+
+    public function bcprk_update()
+    {
+        // Inisialisasi Variabel
+        $file_foto_barang = $this->request->getFile('inp_foto_barang');
+        $nomor_inventaris_prk = $this->request->getPost('nomor_inventaris_prk');
+        $imgname = $this->bcprkmodel->getImagename($nomor_inventaris_prk);
+
+        // Penghapusan File Foto Jika ada upload foto baru
+        if ($file_foto_barang != null) {
+            //delete gambar
+            foreach ($imgname as $imgname1) {
+                $file_name = $imgname1['image'];
+                if (file_exists('img/inventaris/bc/prk/' . $file_name)) {
+                    unlink('img/inventaris/bc/prk/' . $file_name);
+                }
+            }
+
+            // Upload Gambar Baru
+            $nmr_inv = $nomor_inventaris_prk;
+            $ext = $file_foto_barang->getClientExtension();
+            $nama_foto_barang = "$nmr_inv.$ext";
+            $nama_foto = $nama_foto_barang;
+            $file_foto_barang->move('img/inventaris/bc/prk/', $nama_foto_barang);
+            $thumbnail_path = "img/inventaris/bc/prk";
+            // resizing image
+            \Config\Services::image()->withFile('img/inventaris/bc/prk/' . $nama_foto_barang)
+                ->resize(800, 600, true, 'height')
+                ->text(date('dmy H:i:s'), [
+                    'color'      => '#000000',
+                    'opacity'    => 0,
+                    'hAlign'     => 'center',
+                    'vAlign'     => 'bottom',
+                    'fontSize'   => 35
+                ])
+                ->save($thumbnail_path . '/' . $nama_foto_barang);
+        } else {
+            // Hanya Update nama file gambar 
+            foreach ($imgname as $imgname1) {
+                $nama_foto = $imgname1['image'];
+            }
+        }
+
+        $data = [
+            'nomor_inventaris_prk' => $nomor_inventaris_prk,
+            'nomor' => $this->request->getPost('nomor'),
+            'tahun' => $this->request->getPost('tahun'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+            'kategori' => $this->request->getPost('kategori'),
+            'jumlah_unit' => $this->request->getPost('jumlah_unit'),
+            'lokasi' => $this->request->getPost('lokasi'),
+            'lokasi_kantor' => $this->request->getPost('lokasi_kantor'),
+            'image' => $nama_foto,
+            'remark' => $this->request->getPost('remark'),
+            'update_by' => user()->fullname,
+            'last_update' => date('Y-m-d H:i:s'),
+        ];
+        $this->bcprkmodel->where('nomor_inventaris_prk', $nomor_inventaris_prk)->set($data)->update();
+        echo json_encode(array("status" => TRUE));
+    }
+
+    public function bcprk_delete($nomor_inventaris_prk)
+    {
+        // Proses Menghapus File Image
+        $imgname = $this->bcprkmodel->getImagename($nomor_inventaris_prk);
+        foreach ($imgname as $imgname1) {
+            $file_name = $imgname1['image'];
+            if (file_exists('img/inventaris/bc/prk/' . $file_name)) {
+                // Proses Delete gambar
+                unlink('img/inventaris/bc/prk/' . $file_name);
+                // Proses delete data 
+                $this->bcprkmodel->where('nomor_inventaris_prk', $nomor_inventaris_prk)->delete();
+                echo json_encode(array("status" => TRUE));
+            } else {
+                // Proses delete data 
+                $this->bcprkmodel->where('nomor_inventaris_prk', $nomor_inventaris_prk)->delete();
+                echo json_encode(array("status" => TRUE));
+            }
+        }
+    }
+
 
     public function bc_fno()
     {
