@@ -202,6 +202,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="keterangan_lain" name="keterangan_lain" autocomplete="off">
+                                        <label for="floatingSelect">Keterangan Lain</label>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </form>
@@ -265,6 +273,11 @@
                                         <td>Remark</td>
                                         <td>:</td>
                                         <td name="remark"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Keterangan Lain</td>
+                                        <td>:</td>
+                                        <td name="keterangan_lain"></td>
                                     </tr>
                                     <tr>
                                         <td>Lokasi</td>
@@ -423,6 +436,7 @@
 
                     $('[name="view_foto_barang"]').attr('src', "/img/inventaris/bc/prk/" + data[0].image);
                     $('[name="remark"]').val(data[0].remark);
+                    $('[name="keterangan_lain"]').val(data[0].keterangan_lain);
 
                     $('.modal-title').text('Edit Detail Inventaris');
                     $('#modal_edit_bcprk').modal('show'); // show bootstrap modal when complete loaded
@@ -460,6 +474,7 @@
             formDataPRK.append('lokasi', $('#lokasi').val());
             formDataPRK.append('lokasi_kantor', $('#lokasi_kantor').val());
             formDataPRK.append('remark', $('#remark').val());
+            formDataPRK.append('keterangan_lain', $('#keterangan_lain').val());
 
             $.ajax({
                 url: url,
@@ -643,6 +658,7 @@
                     $('[name="lokasi_kantor"]').text(data[0].lokasi_kantor);
                     $('[name="image"]').attr('src', "/img/inventaris/bc/prk/" + data[0].image);
                     $('[name="remark"]').text(data[0].remark);
+                    $('[name="keterangan_lain"]').text(data[0].keterangan_lain);
                     $('[name="update_by"]').text(data[0].update_by);
                     $('[name="last_update"]').text(data[0].last_update);
 

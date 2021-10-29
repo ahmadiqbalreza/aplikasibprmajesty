@@ -202,6 +202,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-bg-6">
+                                <div class="form-group">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="keterangan_lain" name="keterangan_lain" autocomplete="off">
+                                        <label for="floatingSelect">Keterangan Lain</label>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </form>
@@ -265,6 +273,11 @@
                                         <td>Remark</td>
                                         <td>:</td>
                                         <td name="remark"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Keterangan Lain</td>
+                                        <td>:</td>
+                                        <td name="keterangan_lain"></td>
                                     </tr>
                                     <tr>
                                         <td>Lokasi</td>
@@ -421,6 +434,8 @@
                     $('[name="remark"]').append("<option value='Rusak'>Rusak</option>");
                     $('[name="remark"]').append("<option value='Perbaikan'>Perbaikan</option>");
 
+                    $('[name="keterangan_lain"]').val(data[0].keterangan_lain);
+
                     $('[name="view_foto_barang"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
                     $('[name="remark"]').val(data[0].remark);
 
@@ -460,6 +475,7 @@
             formDataPKM.append('lokasi', $('#lokasi').val());
             formDataPKM.append('lokasi_kantor', $('#lokasi_kantor').val());
             formDataPKM.append('remark', $('#remark').val());
+            formDataPKM.append('keterangan_lain', $('#keterangan_lain').val());
 
             $.ajax({
                 url: url,
@@ -555,6 +571,7 @@
                             $('#remark').removeClass('is-invalid');
                             $('.errorremark').html('');
                         }
+
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -643,6 +660,7 @@
                     $('[name="lokasi_kantor"]').text(data[0].lokasi_kantor);
                     $('[name="image"]').attr('src', "/img/inventaris/bc/pkm/" + data[0].image);
                     $('[name="remark"]').text(data[0].remark);
+                    $('[name="keterangan_lain"]').text(data[0].keterangan_lain);
                     $('[name="update_by"]').text(data[0].update_by);
                     $('[name="last_update"]').text(data[0].last_update);
 
