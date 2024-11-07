@@ -33,6 +33,7 @@ class Admin extends BaseController
         $data = [
             'title' => 'Admin'
         ];
+        // data
         echo view('/admin/index', $data);
     }
 
